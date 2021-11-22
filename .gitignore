@@ -18,5 +18,5 @@
 .cxx
 local.properties
 **.idea**
-**.idea\**
+**.idea/**
 app\build.gradle
