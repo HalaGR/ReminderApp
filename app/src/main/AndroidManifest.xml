@@ -10,6 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationReminder">
         <activity
+            android:name=".LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".add_reminder"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -20,10 +28,13 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".add_reminder"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+
+
+        <meta-data
+            android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+            android:value="true" />
+
     </application>
+
 
 </manifest>
