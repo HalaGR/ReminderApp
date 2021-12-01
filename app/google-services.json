@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "460046714985",
+    "project_id": "reminderapp-74afa",
+    "storage_bucket": "reminderapp-74afa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460046714985:android:183c48b58dfde07b79faf8",
+        "android_client_info": {
+          "package_name": "com.example.locationreminder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460046714985-6be9u1cn1nisokdpgj52iia3jp8grkcd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpaldh_UjIjQI3XGBYLZpKFzz1uITynU8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460046714985-6be9u1cn1nisokdpgj52iia3jp8grkcd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
