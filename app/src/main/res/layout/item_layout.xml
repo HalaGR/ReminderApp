@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
@@ -21,17 +22,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
+                    android:id="@+id/notetitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/notetitle"
-                    android:paddingBottom="10dp"
+                    android:layout_weight="1"
+                    android:background="#C59DAA"
                     android:paddingTop="10dp"
                     android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
                     android:text="Title"
-                    android:textSize="20sp"
                     android:textColor="@color/black"
-                    android:layout_weight="1">
+                    android:textSize="20sp">
 
                 </TextView>
                 <ImageView
@@ -47,16 +50,17 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/noteDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/noteDescription"
-                android:paddingBottom="20dp"
-                android:paddingRight="10dp"
+                android:background="#C59DAA"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="20dp"
                 android:text="this is the notes content"
-                android:textSize="15sp"
-                android:textColor="@color/black">
+                android:textColor="@color/black"
+                android:textSize="15sp">
 
             </TextView>
 

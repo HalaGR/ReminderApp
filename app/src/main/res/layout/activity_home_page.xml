@@ -31,6 +31,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
          />
+
+
     <Button
         android:id="@+id/sign_out_but"
         android:layout_width="68dp"
@@ -39,7 +41,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="325dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="605dp"
+        android:layout_marginBottom="735dp"
         android:background="@android:color/transparent"
         android:backgroundTint="@color/black"
         android:text="Sign out"
@@ -56,7 +58,6 @@
         app:layout_constraintVertical_bias="0.0"
 
         />
-
 
     <TextView
         android:id="@+id/verifyMsg"
@@ -108,8 +109,9 @@
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleview"
         android:layout_width="match_parent"
-        android:layout_height="522dp"
+        android:layout_height="615dp"
         android:layout_above="@+id/add_reminder_but" />
 
 

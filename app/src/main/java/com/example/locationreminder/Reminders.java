@@ -4,17 +4,17 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Reminders {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger(0);
     private int ID;
-    String Title;
+    String title;
     String description;
     String Date;
     String time;
 
-    public String getTitle() {
-        return Title;
+    public String gettitle() {
+        return title;
     }
 
-    public void setTitle(String title) {
-        Title = title;
+    public void settitle(String title) {
+        title = title;
     }
 
     public String getTime() {
