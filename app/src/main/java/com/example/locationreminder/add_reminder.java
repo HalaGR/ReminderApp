@@ -1,9 +1,11 @@
 package com.example.locationreminder;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -20,16 +22,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.Year;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class add_reminder extends AppCompatActivity {
 
-    EditText mytitleinput, mydescriptioninput;
+    EditText mytitleinput, mydescriptioninput, mydate;
     FloatingActionButton mysavebtn;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebasefirestore;
+    DatePickerDialog.OnDateSetListener setListener; // listener for choose date
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,29 @@ public class add_reminder extends AppCompatActivity {
         mytitleinput = findViewById(R.id.titleinput);
         mydescriptioninput = findViewById(R.id.descriptioninput);
         mysavebtn = findViewById(R.id.savebtn);
+        mydate = findViewById(R.id.date);
+
+        // choose date UI
+        Calendar calendar = Calendar.getInstance();
+        final int year = calendar.get(Calendar.YEAR);
+        final int day = calendar.get(Calendar.DAY_OF_MONTH);
+        final int month = calendar.get(Calendar.MONTH);
+        mydate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        add_reminder.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        month = month + 1;
+                        String date = day + "/" + month + "/" + year;
+                        mydate.setText(date);
+                    }
+                }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+
 
         Toolbar toolbar = findViewById(R.id.toolbarofaddreminder);
         setSupportActionBar(toolbar);
@@ -48,7 +77,7 @@ public class add_reminder extends AppCompatActivity {
         firebasefirestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        mysavebtn.setOnClickListener(new View.OnClickListener(){
+        mysavebtn.setOnClickListener(new View.OnClickListener(){// add reminder clicked
             @Override
             public void onClick(View view) {
                 String title = mytitleinput.getText().toString();

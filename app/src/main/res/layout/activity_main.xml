@@ -25,7 +25,7 @@
         android:textColorHint="@color/black"
         android:textColorLink="@color/black"
         android:textDirection="ltr"
-        android:textSize="48sp"
+        android:textSize="60sp"
         android:textStyle="bold"
         android:visibility="visible"
         app:autoSizeTextType="uniform"
