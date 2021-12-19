@@ -11,41 +11,33 @@
 
     <TextView
         android:id="@+id/hello_user"
-        android:layout_width="333dp"
-        android:layout_height="81dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="696dp"
+        android:layout_width="500dp"
+        android:layout_height="50dp"
         android:fontFamily="cursive"
-        android:includeFontPadding="true"
+        android:layout_marginTop="50dp"
         android:text="Hello "
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textColorHighlight="@color/black"
         android:textColorHint="@color/black"
         android:textColorLink="@color/black"
-        android:textDirection="ltr"
-        android:textSize="48sp"
         android:textStyle="bold"
         android:visibility="visible"
         app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.076"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.038" />
-
+         />
     <Button
         android:id="@+id/sign_out_but"
-        style="@style/Widget.AppCompat.Button.Small"
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="317dp"
+        android:layout_marginStart="325dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="732dp"
+        android:layout_marginBottom="605dp"
         android:background="@android:color/transparent"
         android:backgroundTint="@color/black"
         android:text="Sign out"
@@ -59,7 +51,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/hello_user"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+
+        />
+
+
+    <TextView
+        android:id="@+id/verifyMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="137dp"
+        android:layout_marginTop="95dp"
+        android:layout_marginRight="5dp"
+        android:text="Email Not Vertified!"
+        android:textColor="@color/Red"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hello_user"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/hello_user"
+        app:layout_constraintVertical_bias="0" />
 
     <Button
         android:id="@+id/add_reminder_but"
@@ -95,7 +107,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="617dp"
+        android:layout_height="522dp"
         android:layout_above="@+id/add_reminder_but" />
 
 

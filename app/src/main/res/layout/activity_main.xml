@@ -38,7 +38,7 @@
 
     <Button
         android:id="@+id/sign_out_but"
-        style="@style/Widget.AppCompat.Button.Small"
+
         android:layout_width="68dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -59,7 +59,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/hello_user"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+
+        />
 
     <Button
         android:id="@+id/add_reminder_but"

@@ -24,6 +24,7 @@
 
     <EditText
         android:id="@+id/pass"
+        android:inputType="textPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Password"
@@ -68,5 +69,15 @@
         app:layout_constraintEnd_toEndOf="@+id/pass"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/pass" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateTint="@color/Pink"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

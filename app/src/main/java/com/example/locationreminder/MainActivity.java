@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
         my_sign_out_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //    startActivity(new Intent(MainActivity.this, login.class)); // go to log in page
+                   FirebaseAuth.getInstance().signOut();
+                   startActivity(new Intent(MainActivity.this, LoginActivity.class)); // go to log in page
+                   finish();
             }
         });
         my_add_reminder_btn = findViewById(R.id.add_reminder_but);
