@@ -2,73 +2,68 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
+    android:padding="10dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="5dp"
-        app:cardCornerRadius="5dp"
-        app:cardMaxElevation="5dp"
-        android:id="@+id/reminder">
-        <LinearLayout
+        android:layout_height="wrap_content">
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/note"
-            android:orientation="vertical">
-
+            android:elevation="5dp"
+            app:cardCornerRadius="5dp"
+            app:cardMaxElevation="5dp"
+            android:id="@+id/reminder">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:id="@+id/note"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/notetitle"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#C59DAA"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/notetitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/Azure"
+                        android:paddingTop="10dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Title"
+                        android:textColor="@color/black"
+                        android:textSize="20sp">
+
+                    </TextView>
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/noteDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/Azure"
+                    android:paddingLeft="10dp"
                     android:paddingTop="10dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
-                    android:text="Title"
+                    android:text="this is the notes content"
                     android:textColor="@color/black"
-                    android:textSize="20sp">
+                    android:textSize="15sp">
 
                 </TextView>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:id="@+id/menubutten"
-                    android:layout_weight="0"
-                    android:src="@drawable/ic_baseline_more_vert_24">
-
-                </ImageView>
 
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/noteDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#C59DAA"
-                android:paddingLeft="10dp"
-                android:paddingTop="10dp"
-                android:paddingRight="10dp"
-                android:paddingBottom="20dp"
-                android:text="this is the notes content"
-                android:textColor="@color/black"
-                android:textSize="15sp">
 
-            </TextView>
-
-
-        </LinearLayout>
-
-
-    </androidx.cardview.widget.CardView>
-
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>>
 
 </RelativeLayout>

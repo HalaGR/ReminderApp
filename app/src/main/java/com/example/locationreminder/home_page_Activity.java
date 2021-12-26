@@ -116,7 +116,7 @@ public class home_page_Activity extends AppCompatActivity {
 
         myrecyclerview = findViewById(R.id.recycleview);
         myrecyclerview.setHasFixedSize(true);
-        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL);
         myrecyclerview.setLayoutManager(staggeredGridLayoutManager);
         myrecyclerview.setAdapter(reminderAdapter);
     }
