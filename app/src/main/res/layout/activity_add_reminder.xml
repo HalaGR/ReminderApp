@@ -109,6 +109,109 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_location_switch"
+        android:layout_width="372dp"
+        android:layout_height="73dp"
+        android:layout_below="@+id/layout_Date"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/rounded_corner"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:text="Location"
+            android:textColor="@color/black"
+            android:textSize="20dp">
+
+        </TextView>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/location_switch"
+            android:layout_width="76dp"
+            android:layout_height="56dp"
+            android:baselineAligned="false"
+            android:textOff="off"
+            android:textOn="on"
+            android:thumb="@drawable/thumb"
+            app:showText="true"
+            app:track="@drawable/track" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_weather_switch"
+        android:layout_width="372dp"
+        android:layout_height="73dp"
+        android:layout_below="@+id/layout_Time_switch"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/rounded_corner"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="82dp"
+            android:layout_height="41dp"
+            android:text="weather"
+            android:textColor="@color/black"
+            android:textSize="20dp">
+
+        </TextView>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/weather_switch"
+            android:layout_width="72dp"
+            android:layout_height="56dp"
+            android:baselineAligned="false"
+            android:textOff="off"
+            android:textOn="on"
+            android:thumb="@drawable/thumb"
+            app:showText="true"
+            app:track="@drawable/track" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layout_Time_switch"
+        android:layout_width="372dp"
+        android:layout_height="73dp"
+        android:layout_below="@+id/layout_location_switch"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/rounded_corner"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="64dp"
+            android:layout_height="41dp"
+            android:text="Time"
+            android:textColor="@color/black"
+            android:textSize="20dp">
+
+        </TextView>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/Time_switch"
+            android:layout_width="76dp"
+            android:layout_height="56dp"
+            android:baselineAligned="false"
+            android:textOff="off"
+            android:textOn="on"
+            android:thumb="@drawable/thumb"
+            app:showText="true"
+            app:track="@drawable/track" />
+
+
+    </LinearLayout>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/savebtn"
         android:layout_width="wrap_content"

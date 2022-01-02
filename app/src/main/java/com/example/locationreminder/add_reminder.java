@@ -82,15 +82,17 @@ public class add_reminder extends AppCompatActivity {
             public void onClick(View view) {
                 String title = mytitleinput.getText().toString();
                 String description = mydescriptioninput.getText().toString();
-                if (title.isEmpty() || description.isEmpty()){
+                String date = mydate.getText().toString();
+                if (title.isEmpty() || date.isEmpty()){
                     //are all files filed
-                    Toast.makeText(getApplicationContext(), "Pleas fill Bothe files", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Pleas fill Both title and Date files", Toast.LENGTH_SHORT).show();
                 }else{
                     // add reminder to database
                     DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
                     Map<String, Object> reminder = new HashMap<>();
                     reminder.put("title", title);
                     reminder.put("description", description);
+                    reminder.put("date", date);
                     documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {

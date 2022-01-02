@@ -104,6 +104,7 @@ public class home_page_Activity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ReminderViweHolder reminderViweHolder, int i, @NonNull firebasemodel firebasemodel) {
                 reminderViweHolder.reminderTitle.setText(firebasemodel.getTitle());
                 reminderViweHolder.reminderDescription.setText(firebasemodel.getDescription());
+                reminderViweHolder.reminderDate.setText(firebasemodel.getDate());
             }
 
             @NonNull
@@ -124,12 +125,14 @@ public class home_page_Activity extends AppCompatActivity {
     public class ReminderViweHolder extends RecyclerView.ViewHolder {
         private TextView reminderTitle;
         private TextView reminderDescription;
+        private TextView reminderDate;
         LinearLayout myreminders;
 
         public ReminderViweHolder(@NonNull View itemView) {
             super(itemView);
             reminderTitle = itemView.findViewById(R.id.notetitle);
             reminderDescription = itemView.findViewById(R.id.noteDescription);
+            reminderDate = itemView.findViewById(R.id.noteDate);
             myreminders = itemView.findViewById(R.id.note);
         }
     }

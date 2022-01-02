@@ -41,7 +41,6 @@
 
                     </TextView>
 
-
                 </LinearLayout>
 
                 <TextView
@@ -58,6 +57,29 @@
                     android:textSize="15sp">
 
                 </TextView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/noteDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/Azure"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp"
+                        android:text="Date"
+                        android:textColor="@color/black"
+                        android:textSize="15sp"
+                        android:visibility="visible">
+
+                    </TextView>
+
+                </LinearLayout>
 
 
             </LinearLayout>
