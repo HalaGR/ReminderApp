@@ -5,11 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,10 +37,16 @@ public class add_reminder extends AppCompatActivity {
 
     EditText mytitleinput, mydescriptioninput, mydate;
     FloatingActionButton mysavebtn;
+    SwitchCompat my_weather_switch;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebasefirestore;
+    AutoCompleteTextView autoCompleteTextView;
+    ArrayAdapter<String> adapterItems;
+    LinearLayout add_weather;
     DatePickerDialog.OnDateSetListener setListener; // listener for choose date
+    String[] weather_conditions = {"Thunder Storm", "Strong Rain", "Snow", "Light Rain", "Foggy", "Overcast", "Sunny", "Cloudy"}; // all weather conditions
+    AutoCompleteTextView autoCompleteTxt;
 
 
     @Override
@@ -45,6 +57,8 @@ public class add_reminder extends AppCompatActivity {
         mydescriptioninput = findViewById(R.id.descriptioninput);
         mysavebtn = findViewById(R.id.savebtn);
         mydate = findViewById(R.id.date);
+        my_weather_switch = findViewById(R.id.weather_switch);
+
 
         // choose date UI
         Calendar calendar = Calendar.getInstance();
@@ -66,6 +80,36 @@ public class add_reminder extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+        // go to choose weather
+        autoCompleteTxt = findViewById(R.id.auto_complete_text);
+        add_weather = findViewById(R.id.layout_add_weather); // need to make it visible
+
+        adapterItems = new ArrayAdapter<String>(this,R.layout.weather_list,weather_conditions);
+        autoCompleteTxt.setAdapter(adapterItems);
+
+        autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(),"Item: "+item,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        my_weather_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked == true){
+                    Toast.makeText(getBaseContext(), "On", Toast.LENGTH_SHORT).show();
+                    add_weather.setVisibility(LinearLayout.VISIBLE);
+
+                }else{
+                    Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
+                    add_weather.setVisibility(LinearLayout.INVISIBLE);
+
+                }
+            }
+        });
+
 
 
         Toolbar toolbar = findViewById(R.id.toolbarofaddreminder);

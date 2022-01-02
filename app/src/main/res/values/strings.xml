@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">locationReminder</string>
+    <string name="select">locationReminder</string>
 </resources>
