@@ -47,4 +47,5 @@ dependencies {
     implementation 'com.google.android.gms:play-services-basement:18.0.0'
     // for fetching data from database
     implementation 'com.firebaseui:firebase-ui-firestore:4.1.0'
+
 }

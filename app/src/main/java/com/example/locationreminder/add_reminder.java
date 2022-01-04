@@ -11,9 +11,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
@@ -36,6 +37,7 @@ import java.util.Map;
 public class add_reminder extends AppCompatActivity {
 
     EditText mytitleinput, mydescriptioninput, mydate;
+    TextView mydate_switch;
     FloatingActionButton mysavebtn;
     SwitchCompat my_weather_switch;
     FirebaseAuth firebaseAuth;
@@ -58,6 +60,7 @@ public class add_reminder extends AppCompatActivity {
         mysavebtn = findViewById(R.id.savebtn);
         mydate = findViewById(R.id.date);
         my_weather_switch = findViewById(R.id.weather_switch);
+        mydate_switch= findViewById(R.id.date_switch);
 
 
         // choose date UI
@@ -65,7 +68,7 @@ public class add_reminder extends AppCompatActivity {
         final int year = calendar.get(Calendar.YEAR);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
         final int month = calendar.get(Calendar.MONTH);
-        mydate.setOnClickListener(new View.OnClickListener() {
+        mydate_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(

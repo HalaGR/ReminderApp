@@ -3,8 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/soft_lights">
+    android:layout_height="match_parent"
+    >
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        android:src="@drawable/for_add_reminder_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".27"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        tools:ignore="ImageContrastCheck"
+        />
 
 
     <androidx.appcompat.widget.Toolbar
@@ -22,7 +36,7 @@
             android:contentDescription="reminde_me"
             android:foregroundGravity="center"
             android:padding="10dp"
-            app:srcCompat="@drawable/remind_me" />
+            app:srcCompat="@drawable/reminder_icon" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -35,7 +49,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/edit_text_bg"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -43,67 +57,109 @@
             android:id="@+id/descriptioninput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="#30C67259"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/edit_txt_bg_with_color"
             android:gravity="top"
-            android:hint="Decription"
+            android:hint="Notes"
             android:lines="3"
             android:padding="10dp"
             android:textColor="@color/black"
-            android:textColorHint="@color/black" />
+            android:textColorHint="@color/SlateGray" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_titleinput"
-        android:layout_below="@+id/toolbarofaddreminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbarofaddreminder"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/edit_text_bg"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+       >
 
         <EditText
             android:id="@+id/titleinput"
             style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#30C67259"
-            android:hint="Name me"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
+            android:background="@drawable/edit_txt_bg_with_color"
+            android:hint="New Reminder"
             android:inputType="textUri"
             android:minHeight="48dp"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="?android:attr/navigationBarColor"
+            android:textColorHint="@color/SlateGray" />
 
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layout_Date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="372dp"
+        android:layout_height="73dp"
         android:layout_below="@+id/layout_description"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corner"
-        android:orientation="vertical"
+        android:background="@drawable/edit_text_bg"
+
         android:padding="10dp">
+
+
+
+
+
+        <ImageView
+            android:id="@+id/image_date"
+            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_gravity="center"
+            android:contentDescription="reminde_me"
+            android:foregroundGravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="0dp"
+            app:srcCompat="@drawable/calender_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="41dp"
+            android:text="Date"
+            android:layout_marginStart="0dp"
+            android:textColor="@color/black"
+            android:textSize="20dp">
+
+        </TextView>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/date_switch"
+            android:layout_width="76dp"
+            android:layout_height="56dp"
+            android:baselineAligned="false"
+            android:textOff="off"
+            android:textOn="on"
+            android:thumb="@drawable/thumb"
+            app:showText="true"
+            app:track="@drawable/track" />
+
 
         <EditText
             android:id="@+id/date"
-            android:layout_width="351dp"
-            android:layout_height="50dp"
-            android:background="#30C67259"
-            android:hint="Choose Date"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black">
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="-125dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:hint=""
+            android:textColor="@color/DarkSlateBlue"
+
+            android:textColorHint="@color/SlateGray"
+            android:textSize="12sp">
 
         </EditText>
 
@@ -117,13 +173,24 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/edit_text_bg"
         android:padding="10dp">
+        <ImageView
+            android:id="@+id/image_location"
+            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_gravity="center"
+            android:contentDescription="reminde_me"
+            android:foregroundGravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="0dp"
+            app:srcCompat="@drawable/location_icon1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="41dp"
             android:text="Location"
+            android:layout_marginStart="0dp"
             android:textColor="@color/black"
             android:textSize="20dp">
 
@@ -151,13 +218,24 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/edit_text_bg"
         android:padding="10dp">
+        <ImageView
+            android:id="@+id/image_weather"
+            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_gravity="center"
+            android:contentDescription="reminde_me"
+            android:foregroundGravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="0dp"
+            app:srcCompat="@drawable/weather_icon" />
 
         <TextView
             android:layout_width="82dp"
             android:layout_height="41dp"
-            android:text="weather"
+            android:layout_marginStart="0dp"
+            android:text="Weather"
             android:textColor="@color/black"
             android:textSize="20dp">
 
@@ -186,12 +264,23 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/edit_text_bg"
         android:padding="10dp">
+        <ImageView
+            android:id="@+id/image_time"
+            android:layout_height="80dp"
+            android:layout_width="70dp"
+            android:layout_gravity="center"
+            android:contentDescription="reminde_me"
+            android:foregroundGravity="center"
+            android:padding="10dp"
+            android:layout_marginStart="0dp"
+            app:srcCompat="@drawable/time_icon" />
 
         <TextView
             android:layout_width="64dp"
             android:layout_height="41dp"
+            android:layout_marginStart="0dp"
             android:text="Time"
             android:textColor="@color/black"
             android:textSize="20dp">
