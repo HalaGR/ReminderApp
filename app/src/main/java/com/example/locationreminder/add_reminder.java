@@ -40,27 +40,32 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class add_reminder extends AppCompatActivity {
 
-    EditText mytitleinput, mydescriptioninput, mydate,mytime;
-    TextView mydate_switch,mytime_switch,mylocation_switch;
+    EditText mytitleinput, mydescriptioninput, mydate,mytime, weatherCity;
+    SwitchCompat mydate_switch;
+    SwitchCompat myTime_switch;
     FloatingActionButton mysavebtn;
     SwitchCompat my_weather_switch;
+    SwitchCompat my_location_switch;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firebasefirestore;
-    AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
     LinearLayout add_weather;
     DatePickerDialog.OnDateSetListener setListener; // listener for choose date
     String[] weather_conditions = {"Thunder Storm", "Strong Rain", "Snow", "Light Rain", "Foggy", "Overcast", "Sunny", "Cloudy"}; // all weather conditions
     AutoCompleteTextView autoCompleteTxt;
-    ViewPager myviewPager;
     FrameLayout myframe_layout;
+    Button timebtn;
+    TextInputLayout weatherCond;
+    int hour, minute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,15 +78,32 @@ public class add_reminder extends AppCompatActivity {
         mytime=findViewById(R.id.time);
         my_weather_switch = findViewById(R.id.weather_switch);
         mydate_switch= findViewById(R.id.date_switch);
-        mylocation_switch=findViewById(R.id.location_switch);
-        mytime_switch=findViewById(R.id.time_switch);
         myframe_layout=findViewById(R.id.frame_layout);
+        timebtn = findViewById(R.id.time);
+        weatherCity = findViewById(R.id.weather_city);
+        weatherCond = findViewById(R.id.weather_cond);
+        myTime_switch = findViewById(R.id.Time_switch);
+        my_location_switch = findViewById(R.id.location_switch);
 
         // choose date UI
         Calendar calendar = Calendar.getInstance();
         final int year = calendar.get(Calendar.YEAR);
         final int day = calendar.get(Calendar.DAY_OF_MONTH);
         final int month = calendar.get(Calendar.MONTH);
+        // go to choose weather
+        autoCompleteTxt = findViewById(R.id.auto_complete_text);
+        add_weather = findViewById(R.id.layout_add_weather); // need to make it visible
+
+        adapterItems = new ArrayAdapter<String>(this,R.layout.weather_list,weather_conditions);
+        autoCompleteTxt.setAdapter(adapterItems);
+
+        autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String item = parent.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(),"Condition: "+item,Toast.LENGTH_SHORT).show();
+            }
+        });
         mydate_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,20 +119,7 @@ public class add_reminder extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        // go to choose weather
-        autoCompleteTxt = findViewById(R.id.auto_complete_text);
-        add_weather = findViewById(R.id.layout_add_weather); // need to make it visible
 
-        adapterItems = new ArrayAdapter<String>(this,R.layout.weather_list,weather_conditions);
-        autoCompleteTxt.setAdapter(adapterItems);
-
-        autoCompleteTxt.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                Toast.makeText(getApplicationContext(),"Item: "+item,Toast.LENGTH_SHORT).show();
-            }
-        });
 
         my_weather_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -126,12 +135,43 @@ public class add_reminder extends AppCompatActivity {
                 }
             }
         });
+        // Date switch
+        mydate_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked == true){
+                    Toast.makeText(getBaseContext(), "On", Toast.LENGTH_SHORT).show();
+                    mydate.setVisibility(LinearLayout.VISIBLE);
+                }else{
+                    Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
+                    mydate.setText("");
+                    mydate.setVisibility(LinearLayout.INVISIBLE);
+
+                }
+            }
+        });
+
+        // Time switch
+        myTime_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if (isChecked == true){
+                    Toast.makeText(getBaseContext(), "On", Toast.LENGTH_SHORT).show();
+                    timebtn.setVisibility(LinearLayout.VISIBLE);
+                }else{
+                    Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
+                    timebtn.setText("Select Time");
+                    timebtn.setVisibility(LinearLayout.INVISIBLE);
+
+                }
+            }
+        });
 
         //time set
         final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
         final int minute = calendar.get(Calendar.MINUTE);
 
-        mytime_switch.setOnClickListener(new View.OnClickListener() {
+        myTime_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
@@ -155,7 +195,7 @@ public class add_reminder extends AppCompatActivity {
         });
        //location set
         //final LocationAdapter adapter=new LocationAdapter(getSupportFragmentManager(),this,1);
-        mylocation_switch.setOnClickListener(new View.OnClickListener() {
+        my_location_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //Initialize fragment
@@ -177,24 +217,55 @@ public class add_reminder extends AppCompatActivity {
         firebasefirestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        mysavebtn.setOnClickListener(new View.OnClickListener(){// add reminder clicked
+        mysavebtn.setOnClickListener(new View.OnClickListener(){      // save button clicked
             @Override
             public void onClick(View view) {
                 String title = mytitleinput.getText().toString();
                 String description = mydescriptioninput.getText().toString();
                 String date = mydate.getText().toString();
-                String time=mytime.getText().toString();
-                if (title.isEmpty() || date.isEmpty() || time.isEmpty()){
+                String location = "";
+                String time = timebtn.getText().toString();
+                String city = weatherCity.getText().toString();
+                String condition = autoCompleteTxt.getText().toString();
+
+                // add reminder to database
+                DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
+                Map<String, Object> reminder = new HashMap<>(); // save reminder data in a map
+                if (mydate_switch.isChecked()) { // if Date is chosen
+                    if (date.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Pleas Choose a Date", Toast.LENGTH_SHORT).show();
+                    } else {
+                        reminder.put("date", date);
+                    }
+                }
+                if(myTime_switch.isChecked()) {    //if time is chosen
+                    if (time.equals("Select Time")) {
+                        Toast.makeText(getApplicationContext(), "Pleas Choose a Time", Toast.LENGTH_SHORT).show();
+                    } else {
+                        reminder.put("time", time);
+                    }
+                }
+                if (my_weather_switch.isChecked()) {   //if weather condition is chosen and a city
+                    if (city.isEmpty() || condition.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Pleas fill Both City and Weather Condition files", Toast.LENGTH_SHORT).show();
+                    } else {
+                        List<String> weather=new ArrayList<String>();
+                        weather.add(city);
+                        weather.add(condition);
+                        reminder.put("weather",weather);
+                    }
+                }
+                if (my_location_switch.isChecked()){ // Need to fill this for location
+                        //chek data and save them in reminder map
+                }else {
+                    reminder.put("location", location);
+                }
+                if (title.isEmpty() || description.isEmpty()){// make sure files are filled
                     //are all files filed
-                    Toast.makeText(getApplicationContext(), "Please fill Both title and Date files", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Pleas fill Both title and description files", Toast.LENGTH_SHORT).show();
                 }else{
-                    // add reminder to database
-                    DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
-                    Map<String, Object> reminder = new HashMap<>();
                     reminder.put("title", title);
                     reminder.put("description", description);
-                    reminder.put("date", date);
-                    reminder.put("time", time);
                     documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -210,7 +281,6 @@ public class add_reminder extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "Something went wrong, Pleas try again!" , Toast.LENGTH_SHORT).show();
                         }
                     });
-
                 }
             }
         });
@@ -223,5 +293,21 @@ public class add_reminder extends AppCompatActivity {
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void popTimeClicker(View view) {
+        TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                hour = selectedHour;
+                minute = selectedMinute;
+                timebtn.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+            }
+        };
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, onTimeSetListener, hour, minute, true);
+        timePickerDialog.setTitle("Select Time");
+        timePickerDialog.show();
+
     }
 }
