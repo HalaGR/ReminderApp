@@ -1,6 +1,7 @@
 package com.example.locationreminder;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
+import android.widget.TimePicker;
 import android.widget.EditText;
 
 import android.widget.LinearLayout;
@@ -20,14 +23,21 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.time.Year;
 import java.util.Calendar;
@@ -36,8 +46,8 @@ import java.util.Map;
 
 public class add_reminder extends AppCompatActivity {
 
-    EditText mytitleinput, mydescriptioninput, mydate;
-    TextView mydate_switch;
+    EditText mytitleinput, mydescriptioninput, mydate,mytime;
+    TextView mydate_switch,mytime_switch,mylocation_switch;
     FloatingActionButton mysavebtn;
     SwitchCompat my_weather_switch;
     FirebaseAuth firebaseAuth;
@@ -49,7 +59,8 @@ public class add_reminder extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener setListener; // listener for choose date
     String[] weather_conditions = {"Thunder Storm", "Strong Rain", "Snow", "Light Rain", "Foggy", "Overcast", "Sunny", "Cloudy"}; // all weather conditions
     AutoCompleteTextView autoCompleteTxt;
-
+    ViewPager myviewPager;
+    FrameLayout myframe_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +70,12 @@ public class add_reminder extends AppCompatActivity {
         mydescriptioninput = findViewById(R.id.descriptioninput);
         mysavebtn = findViewById(R.id.savebtn);
         mydate = findViewById(R.id.date);
+        mytime=findViewById(R.id.time);
         my_weather_switch = findViewById(R.id.weather_switch);
         mydate_switch= findViewById(R.id.date_switch);
-
+        mylocation_switch=findViewById(R.id.location_switch);
+        mytime_switch=findViewById(R.id.time_switch);
+        myframe_layout=findViewById(R.id.frame_layout);
 
         // choose date UI
         Calendar calendar = Calendar.getInstance();
@@ -113,6 +127,45 @@ public class add_reminder extends AppCompatActivity {
             }
         });
 
+        //time set
+        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
+
+        mytime_switch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        add_reminder.this,android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                     Calendar c =Calendar.getInstance();
+                     c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                     c.set(Calendar.MINUTE,minute);
+                     c.set(Calendar.SECOND,0);
+                        String time = hourOfDay + ":" + minute ;
+                        mytime.setText(time);
+
+                    }
+                }, hourOfDay, minute, false);
+
+                timePickerDialog.show();
+
+
+            }
+        });
+       //location set
+        //final LocationAdapter adapter=new LocationAdapter(getSupportFragmentManager(),this,1);
+        mylocation_switch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Initialize fragment
+               //Fragment fragment =new MapsFragment();
+               //Open fragment
+                //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
+                startActivity(new Intent(add_reminder.this,add_location.class));
+            }
+        });
+
 
 
         Toolbar toolbar = findViewById(R.id.toolbarofaddreminder);
@@ -130,9 +183,10 @@ public class add_reminder extends AppCompatActivity {
                 String title = mytitleinput.getText().toString();
                 String description = mydescriptioninput.getText().toString();
                 String date = mydate.getText().toString();
-                if (title.isEmpty() || date.isEmpty()){
+                String time=mytime.getText().toString();
+                if (title.isEmpty() || date.isEmpty() || time.isEmpty()){
                     //are all files filed
-                    Toast.makeText(getApplicationContext(), "Pleas fill Both title and Date files", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please fill Both title and Date files", Toast.LENGTH_SHORT).show();
                 }else{
                     // add reminder to database
                     DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
@@ -140,6 +194,7 @@ public class add_reminder extends AppCompatActivity {
                     reminder.put("title", title);
                     reminder.put("description", description);
                     reminder.put("date", date);
+                    reminder.put("time", time);
                     documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {

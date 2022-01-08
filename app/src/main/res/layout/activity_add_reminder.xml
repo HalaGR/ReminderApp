@@ -266,15 +266,16 @@
         android:layout_marginEnd="10dp"
         android:background="@drawable/edit_text_bg"
         android:padding="10dp">
+
         <ImageView
             android:id="@+id/image_time"
-            android:layout_height="80dp"
             android:layout_width="70dp"
+            android:layout_height="80dp"
             android:layout_gravity="center"
+            android:layout_marginStart="0dp"
             android:contentDescription="reminde_me"
             android:foregroundGravity="center"
             android:padding="10dp"
-            android:layout_marginStart="0dp"
             app:srcCompat="@drawable/time_icon" />
 
         <TextView
@@ -288,7 +289,7 @@
         </TextView>
 
         <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/Time_switch"
+            android:id="@+id/time_switch"
             android:layout_width="76dp"
             android:layout_height="56dp"
             android:baselineAligned="false"
@@ -297,7 +298,18 @@
             android:thumb="@drawable/thumb"
             app:showText="true"
             app:track="@drawable/track" />
+        <EditText
+            android:id="@+id/time"
+            android:layout_width="150dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="-125dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:hint=""
+            android:textColor="@color/DarkSlateBlue"
 
+            android:textColorHint="@color/SlateGray"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 
@@ -326,6 +338,7 @@
         </EditText>
 
         <com.google.android.material.textfield.TextInputLayout
+
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="select Weather Condition"
@@ -364,6 +377,19 @@
         android:layout_height="423dp"
         android:layout_below="@+id/layout_add_weather"
         app:srcCompat="@drawable/black_clock" />
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="650dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.91"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0"
+
+        />
 
 
 </RelativeLayout>
