@@ -73,8 +73,7 @@ public class add_reminder extends AppCompatActivity {
 
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
     SwitchCompat mydate_switch,mytime_switch,mylocation_switch;
-    EditText mytitleinput, mydescriptioninput, mydate,mytime, weatherCity;
-    SwitchCompat mydate_switch;
+    EditText  weatherCity;
     SwitchCompat myTime_switch;
 
     FloatingActionButton mysavebtn;
@@ -150,7 +149,7 @@ public class add_reminder extends AppCompatActivity {
         timeButten = findViewById(R.id.timeButten);
         weatherCity = findViewById(R.id.weather_city);
         weatherCond = findViewById(R.id.weather_cond);
-        myTime_switch = findViewById(R.id.Time_switch);
+        myTime_switch = findViewById(R.id.time_switch);
         my_location_switch = findViewById(R.id.location_switch);
         Log.d("notification", "inside  addReminder#1");
 

@@ -232,7 +232,7 @@
                 </TextView>
 
                 <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/Time_switch"
+                    android:id="@+id/time_switch"
                     android:layout_width="72dp"
                     android:layout_height="56dp"
                     android:baselineAligned="false"

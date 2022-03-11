@@ -9,8 +9,7 @@
         <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/drawable/thumb.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/drawable/thump.xml" value="0.3356164383561644" />
         <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/drawable/track.xml" value="0.3356164383561644" />
-        <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/layout/activity_add_location.xml" value="0.24444444444444444" />
-        <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/layout/activity_add_reminder.xml" value="0.11904761904761904" />
+        <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/layout/activity_add_reminder.xml" value="0.25" />
         <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/layout/activity_home_page.xml" value="0.25" />
         <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/halag/Documents/cs/year_project/locationReminder/app/src/main/res/layout/activity_weather.xml" value="0.32592592592592595" />
@@ -31,23 +30,19 @@
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/drawable/track.xml" value="0.2046875" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/drawable/vie_bg.xml" value="0.1859375" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_add_location.xml" value="0.1" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_add_reminder.xml" value="0.12" />
+        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_add_reminder.xml" value="0.1" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_home_page.xml" value="0.15" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_login.xml" value="0.1" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_add_reminder.xml" value="0.18" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_home_page.xml" value="0.25" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_login.xml" value="0.12886597938144329" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/activity_main.xml" value="0.1859375" />
+        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/deletefor.xml" value="0.13703703703703704" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/for_test.xml" value="0.33" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/hh.xml" value="0.17916666666666667" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/item_layout.xml" value="0.1517509727626459" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/login_tab_fragment.xml" value="0.1" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/signup_tab_fragment.xml" value="0.16983695652173914" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/item_layout.xml" value="0.2" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/login_tab_fragment.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/signup_tab_fragment.xml" value="0.1" />
         <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/try_t.xml" value="0.1" />
+        <entry key="..\:/Users/user/OneDrive/Desktop/ReminderApp/app/src/main/res/layout/weather_list.xml" value="0.17552083333333332" />
       </map>
     </option>
   </component>
