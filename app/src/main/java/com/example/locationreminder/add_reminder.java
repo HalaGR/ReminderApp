@@ -1,9 +1,17 @@
 package com.example.locationreminder;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.AlarmClock;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,6 +36,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.locationreminder.databinding.ActivityMainBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+
 public class add_reminder extends AppCompatActivity {
 
     EditText mytitleinput, mydescriptioninput, mydate,mytime, weatherCity;
@@ -67,9 +77,17 @@ public class add_reminder extends AppCompatActivity {
     String[] weather_conditions = {"Thunder Storm", "Strong Rain", "Snow", "Light Rain", "Foggy", "Overcast", "Sunny", "Cloudy"}; // all weather conditions
     AutoCompleteTextView autoCompleteTxt;
     FrameLayout myframe_layout;
-    Button timebtn;
+    Button timeButten;
     TextInputLayout weatherCond;
     int hour, minute;
+    //set alarm param
+    private AlarmManager alarmManager;
+    private PendingIntent pendingIntent;
+    private Calendar c;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,17 +101,20 @@ public class add_reminder extends AppCompatActivity {
         my_weather_switch = findViewById(R.id.weather_switch);
         mydate_switch= findViewById(R.id.date_switch);
         myframe_layout=findViewById(R.id.frame_layout);
-        timebtn = findViewById(R.id.time);
+        timeButten = findViewById(R.id.timeButten);
         weatherCity = findViewById(R.id.weather_city);
         weatherCond = findViewById(R.id.weather_cond);
         myTime_switch = findViewById(R.id.Time_switch);
         my_location_switch = findViewById(R.id.location_switch);
+        Log.d("notification", "inside  addReminder#1");
+
 
         // choose date UI
-        Calendar calendar = Calendar.getInstance();
-        final int year = calendar.get(Calendar.YEAR);
-        final int day = calendar.get(Calendar.DAY_OF_MONTH);
-        final int month = calendar.get(Calendar.MONTH);
+        c = Calendar.getInstance();
+        createNotificationChannel();
+        final int year = c.get(Calendar.YEAR);
+        final int day = c.get(Calendar.DAY_OF_MONTH);
+        final int month = c.get(Calendar.MONTH);
         // go to choose weather
         autoCompleteTxt = findViewById(R.id.auto_complete_text);
         add_weather = findViewById(R.id.layout_add_weather); // need to make it visible
@@ -117,6 +138,11 @@ public class add_reminder extends AppCompatActivity {
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         month = month + 1;
                         String date = day + "/" + month + "/" + year;
+                        c.set(Calendar.MONTH+1,month);
+                        c.set(Calendar.YEAR,year);
+                        c.set(Calendar.DAY_OF_MONTH,day);
+                        c.set(Calendar.SECOND,0);
+                        c.set(Calendar.MILLISECOND,0);
                         mydate.setText(date);
                     }
                 }, year, month, day);
@@ -161,28 +187,23 @@ public class add_reminder extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked == true){
                     Toast.makeText(getBaseContext(), "On", Toast.LENGTH_SHORT).show();
-                    timebtn.setVisibility(LinearLayout.VISIBLE);
+                    timeButten.setVisibility(View.VISIBLE);
                 }else{
                     Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
-                    timebtn.setText("Select Time");
-                    timebtn.setVisibility(LinearLayout.INVISIBLE);
+                    timeButten.setText("Select Time");
+                    timeButten.setVisibility(View.INVISIBLE);
 
                 }
             }
         });
 
-        //time set
-        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        final int minute = calendar.get(Calendar.MINUTE);
-
-        myTime_switch.setOnClickListener(new View.OnClickListener() {
+      /*  timeButten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
                         add_reminder.this,android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                     Calendar c =Calendar.getInstance();
                      c.set(Calendar.HOUR_OF_DAY,hourOfDay);
                      c.set(Calendar.MINUTE,minute);
                      c.set(Calendar.SECOND,0);
@@ -196,7 +217,8 @@ public class add_reminder extends AppCompatActivity {
 
 
             }
-        });
+        });*/
+
        //location set
         //final LocationAdapter adapter=new LocationAdapter(getSupportFragmentManager(),this,1);
         my_location_switch.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +250,7 @@ public class add_reminder extends AppCompatActivity {
                 String description = mydescriptioninput.getText().toString();
                 String date = mydate.getText().toString();
                 String location = "";
-                String time = timebtn.getText().toString();
+                String time = timeButten.getText().toString();
                 String city = weatherCity.getText().toString();
                 String condition = autoCompleteTxt.getText().toString();
 
@@ -273,11 +295,12 @@ public class add_reminder extends AppCompatActivity {
                     documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            // reminder saved successfully
+                            //reminder saved successfully
                             // send feedback and go back to home page
-                            Toast.makeText(getApplicationContext(), "Reminder saved successfully, we'll remind you!" , Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Reminder saved successfully, we'll remind you!" , Toast.LENGTH_LONG).show();
                             startActivity(new Intent(add_reminder.this, home_page_Activity.class));
-
+                            //set alarM
+                            setAlarm();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -288,6 +311,34 @@ public class add_reminder extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void setAlarm() {
+        Log.d("notification", "inside setAlarm in addReminder" );
+
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this,AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+        Toast.makeText(this, "Alarm set Successfully" , Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    private void createNotificationChannel() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence name = "foxandroidReminderChannel";
+            String description = "Channel For Alarm Manager";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("foxandroid",name,importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+            Log.d("notification", "inside createNotificationChannel in addReminder");
+
+        }
+
     }
 
     @Override
@@ -305,7 +356,11 @@ public class add_reminder extends AppCompatActivity {
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                 hour = selectedHour;
                 minute = selectedMinute;
-                timebtn.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
+                c.set(Calendar.HOUR_OF_DAY,selectedHour);
+                c.set(Calendar.MINUTE,minute);
+                c.set(Calendar.SECOND,0);
+                c.set(Calendar.MILLISECOND,0);
+                timeButten.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute));
             }
         };
 

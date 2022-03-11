@@ -148,7 +148,7 @@ public class home_page_Activity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         if (reminderAdapter != null){
-            reminderAdapter.startListening(); //might need to change to startListening!!
+            reminderAdapter.startListening();
         }
 
     }

@@ -58,7 +58,6 @@
                     android:inputType="textUri"
                     android:minHeight="48dp"
                     android:padding="10dp"
-                    android:textColor="?android:attr/navigationBarColor"
                     android:textColorHint="@color/SlateGray" />
 
             </LinearLayout>
