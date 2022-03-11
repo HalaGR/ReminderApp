@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,10 @@ public class home_page_Activity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
+
+        //************************************
+
+        //************************************
         if (!user.isEmailVerified()) {
             verifyMsg.setVisibility(View.VISIBLE);
             verifyMsg.setOnClickListener(new View.OnClickListener() {
@@ -105,6 +110,7 @@ public class home_page_Activity extends AppCompatActivity {
                 reminderViweHolder.reminderTitle.setText(firebasemodel.getTitle());
                 reminderViweHolder.reminderDescription.setText(firebasemodel.getDescription());
                 reminderViweHolder.reminderDate.setText(firebasemodel.getDate());
+
             }
 
             @NonNull
@@ -134,6 +140,7 @@ public class home_page_Activity extends AppCompatActivity {
             reminderDescription = itemView.findViewById(R.id.noteDescription);
             reminderDate = itemView.findViewById(R.id.noteDate);
             myreminders = itemView.findViewById(R.id.note);
+
         }
     }
 

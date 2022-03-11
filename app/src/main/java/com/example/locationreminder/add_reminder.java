@@ -1,9 +1,13 @@
 package com.example.locationreminder;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.common.internal.ICancelToken;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,6 +44,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+
 import java.time.Year;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -47,7 +53,7 @@ import java.util.Map;
 public class add_reminder extends AppCompatActivity {
 
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
-    TextView mydate_switch,mytime_switch,mylocation_switch;
+    SwitchCompat mydate_switch,mytime_switch,mylocation_switch;
     FloatingActionButton mysavebtn;
     SwitchCompat my_weather_switch;
     FirebaseAuth firebaseAuth;
@@ -61,6 +67,11 @@ public class add_reminder extends AppCompatActivity {
     AutoCompleteTextView autoCompleteTxt;
     ViewPager myviewPager;
     FrameLayout myframe_layout;
+    Location location;
+    String title;
+    String description ;
+    String date ;
+    String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +86,26 @@ public class add_reminder extends AppCompatActivity {
         mydate_switch= findViewById(R.id.date_switch);
         mylocation_switch=findViewById(R.id.location_switch);
         mytime_switch=findViewById(R.id.time_switch);
+
         myframe_layout=findViewById(R.id.frame_layout);
+//**********************************************
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            location = extras.getParcelable("location");
+            title = extras.getString("mytitleinput");
+            description = extras.getString("mydescriptioninput");
+            date = extras.getString("mydate");
+            time = extras.getString("mytime");
+            mytitleinput.setText(title);
+            mydescriptioninput.setText(description);
+            mydate.setText(date);
+            mytime.setText(time);
+            if(!date.equals("")) mydate_switch.setChecked(true);
+            if(!time.equals("")) mytime_switch.setChecked(true);
+             if(location!=null)mylocation_switch.setChecked(true);
+            //The key argument here must match that used in the other activity
+        }
+//**************************************************
 
         // choose date UI
         Calendar calendar = Calendar.getInstance();
@@ -85,6 +115,7 @@ public class add_reminder extends AppCompatActivity {
         mydate_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
                         add_reminder.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -92,8 +123,17 @@ public class add_reminder extends AppCompatActivity {
                         month = month + 1;
                         String date = day + "/" + month + "/" + year;
                         mydate.setText(date);
+                        mydate_switch.setChecked(true);
                     }
+
                 }, year, month, day);
+                datePickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        mydate.setText("");
+                        mytime_switch.setChecked(false);
+                    }
+                });
                 datePickerDialog.show();
             }
         });
@@ -144,9 +184,21 @@ public class add_reminder extends AppCompatActivity {
                      c.set(Calendar.SECOND,0);
                         String time = hourOfDay + ":" + minute ;
                         mytime.setText(time);
+                        mytime_switch.setChecked(true);
 
                     }
                 }, hourOfDay, minute, false);
+
+                timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (which == DialogInterface.BUTTON_NEGATIVE)
+                        {
+                            mytime.setText("");
+                            mytime_switch.setChecked(false);
+                        }
+                    }
+                });
 
                 timePickerDialog.show();
 
@@ -162,9 +214,15 @@ public class add_reminder extends AppCompatActivity {
                //Fragment fragment =new MapsFragment();
                //Open fragment
                 //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
-                startActivity(new Intent(add_reminder.this,add_location.class));
+                Intent n= new Intent(add_reminder.this,add_location.class);
+                n.putExtra("mytitleinput", mytitleinput.getText().toString());
+                n.putExtra("mydescriptioninput", mydescriptioninput.getText().toString());
+                n.putExtra("mydate", mydate.getText().toString());
+                n.putExtra("mytime", mytime.getText().toString());
+                startActivity(n);
             }
         });
+
 
 
 
@@ -180,21 +238,22 @@ public class add_reminder extends AppCompatActivity {
         mysavebtn.setOnClickListener(new View.OnClickListener(){// add reminder clicked
             @Override
             public void onClick(View view) {
-                String title = mytitleinput.getText().toString();
-                String description = mydescriptioninput.getText().toString();
-                String date = mydate.getText().toString();
-                String time=mytime.getText().toString();
-                if (title.isEmpty() || date.isEmpty() || time.isEmpty()){
+                title = mytitleinput.getText().toString();
+                description = mydescriptioninput.getText().toString();
+                date = mydate.getText().toString();
+                time=mytime.getText().toString();
+                if (title.isEmpty() || (date.isEmpty() && time.isEmpty() &&location==null)){
                     //are all files filed
-                    Toast.makeText(getApplicationContext(), "Please fill Both title and Date files", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please fill Both title and at least one of three options", Toast.LENGTH_SHORT).show();
                 }else{
                     // add reminder to database
                     DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
-                    Map<String, Object> reminder = new HashMap<>();
+                    Map<String, Object>  reminder = new HashMap<>();
                     reminder.put("title", title);
                     reminder.put("description", description);
                     reminder.put("date", date);
                     reminder.put("time", time);
+                    reminder.put("location", location);
                     documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -224,4 +283,5 @@ public class add_reminder extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

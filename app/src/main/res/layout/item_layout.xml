@@ -6,14 +6,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+
+        >
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="5dp"
             app:cardCornerRadius="5dp"
             app:cardMaxElevation="5dp"
-            android:id="@+id/reminder">
+            android:id="@+id/reminder"
+
+            >
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -36,6 +41,7 @@
                         android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="Title"
+                        android:textStyle="bold"
                         android:textColor="@color/black"
                         android:textSize="20sp">
 
@@ -50,10 +56,11 @@
                     android:background="@color/Azure"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
+                    android:textStyle="bold"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:text="this is the notes content"
-                    android:textColor="@color/black"
+                    android:textColor="@color/Gray"
                     android:textSize="15sp">
 
                 </TextView>
@@ -70,10 +77,11 @@
                         android:background="@color/Azure"
                         android:paddingLeft="10dp"
                         android:paddingTop="10dp"
+                        android:textStyle="bold"
                         android:paddingRight="10dp"
                         android:paddingBottom="10dp"
                         android:text="Date"
-                        android:textColor="@color/black"
+                        android:textColor="@color/Gray"
                         android:textSize="15sp"
                         android:visibility="visible">
 
