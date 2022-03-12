@@ -118,12 +118,12 @@ public class add_reminder extends AppCompatActivity {
         mydescriptioninput = findViewById(R.id.descriptioninput);
         mysavebtn = findViewById(R.id.savebtn);
         mydate = findViewById(R.id.date);
-        mytime=findViewById(R.id.time);
         my_weather_switch = findViewById(R.id.weather_switch);
         mydate_switch= findViewById(R.id.date_switch);
 
         mylocation_switch=findViewById(R.id.location_switch);
         mytime_switch=findViewById(R.id.time_switch);
+        timeButten = findViewById(R.id.timeButten);
 
         myframe_layout=findViewById(R.id.frame_layout);
 //**********************************************
@@ -137,9 +137,9 @@ public class add_reminder extends AppCompatActivity {
             mytitleinput.setText(title);
             mydescriptioninput.setText(description);
             mydate.setText(date);
-            mytime.setText(time);
+            timeButten.setText(time);
             if(!date.equals("")) mydate_switch.setChecked(true);
-            if(!time.equals("")) mytime_switch.setChecked(true);
+            if(!time.equals("Select Time")) mytime_switch.setChecked(true);
              if(location!=null)mylocation_switch.setChecked(true);
             //The key argument here must match that used in the other activity
         }
@@ -289,19 +289,31 @@ public class add_reminder extends AppCompatActivity {
 
        //location set
         //final LocationAdapter adapter=new LocationAdapter(getSupportFragmentManager(),this,1);
-        my_location_switch.setOnClickListener(new View.OnClickListener() {
+        my_location_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 //Initialize fragment
                //Fragment fragment =new MapsFragment();
                //Open fragment
                 //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
-                Intent n= new Intent(add_reminder.this,add_location.class);
-                n.putExtra("mytitleinput", mytitleinput.getText().toString());
-                n.putExtra("mydescriptioninput", mydescriptioninput.getText().toString());
-                n.putExtra("mydate", mydate.getText().toString());
-                n.putExtra("mytime", mytime.getText().toString());
-                startActivity(n);
+                if (isChecked == true) {
+                    Intent n = new Intent(add_reminder.this, add_location.class);
+                    if (mytitleinput.getText() != null) {
+                        n.putExtra("mytitleinput", mytitleinput.getText().toString());
+                    }
+                    if (mydescriptioninput.getText() != null) {
+                        n.putExtra("mydescriptioninput", mydescriptioninput.getText().toString());
+                    }
+                    if (mydate.getText() != null) {
+                        n.putExtra("mydate", mydate.getText().toString());
+                    }
+                    if (timeButten.getText() != null) {
+                        n.putExtra("mytime", timeButten.getText().toString());
+                    }
+                    startActivity(n);
+                }else{
+                    Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

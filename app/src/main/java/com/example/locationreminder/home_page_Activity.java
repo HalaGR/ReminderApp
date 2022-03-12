@@ -95,6 +95,7 @@ public class home_page_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) { //go to add reminder page on click
                 startActivity(new Intent(home_page_Activity.this, add_reminder.class));
+                finish();
             }
         });
 

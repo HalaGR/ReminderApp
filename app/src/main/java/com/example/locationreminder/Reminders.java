@@ -1,5 +1,6 @@
 package com.example.locationreminder;
 import java.util.concurrent.atomic.AtomicInteger;
+import android.location.Location;
 
 public class Reminders {
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger(0);
@@ -8,6 +9,15 @@ public class Reminders {
     String description;
     String Date;
     String time;
+    Location location;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public String gettitle() {
         return title;
