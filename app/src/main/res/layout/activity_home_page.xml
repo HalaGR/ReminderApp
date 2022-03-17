@@ -1,114 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-   >
+    android:paddingRight="20dp"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:paddingLeft="20dp"
+    tools:context=".home_page_Activity">
 
-    <ImageView
-        android:id="@+id/background"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/for_homebage"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent=".27"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0"
-        tools:ignore="ImageContrastCheck" />
 
-    <TextView
-        android:id="@+id/reminder_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/DarkOrchid"
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All reminders"
+                fontPath="fonts/nunito_extra_bold.ttf"
+                android:textStyle="bold"
+                android:textColor="@color/DarkMagenta"
+                android:textSize="28sp"
+                tools:ignore="MissingPrefix" />
+
+        </LinearLayout>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right|center"
+            android:background="@drawable/ic_baseline_calendar_today_24"
+            android:id="@+id/calendar"/>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        <ImageView
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:id="@+id/noDataImage"
+            android:layout_gravity="center"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recycleview"/>
+        </FrameLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:text="Add Reminder"
+            android:drawablePadding="10dp"
+            android:paddingTop="10dp"
+            android:id="@+id/add_reminder_but"
+            android:layout_gravity="center"
+            android:textColor="@color/DarkOrchid"
+            android:textSize="20sp"
+            android:drawableLeft="@drawable/ic_baseline_add_24"
+            android:textAlignment="center"
+            android:layout_weight="0.5"
+            android:layout_marginBottom="20dp"/>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/sign_out_but"
+
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginLeft="0dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="-720dp"
         android:layout_marginRight="5dp"
-        android:text="Reminders"
-        android:textColor="@color/white"
-        android:textSize="35dp"
-
-        android:textStyle="bold"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintVertical_bias=".2" />
-
-        <Button
-            android:id="@+id/sign_out_but"
-
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginLeft="320dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/logout_512"
-
-
-            tools:ignore="SpeakableTextPresentCheck" />
+        android:background="@drawable/back"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <TextView
         android:id="@+id/verifyMsg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="130dp"
-        android:layout_marginTop="95dp"
+        android:layout_width="120dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
         android:text="Email Not Vertified!"
         android:textColor="@color/Red"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0" />
+    />
 
-
-    <Button
-        android:id="@+id/add_reminder_but"
-        android:layout_width="64dp"
-        android:layout_height="59dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="321dp"
-        android:layout_marginLeft="250dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="34dp"
-        android:layout_weight="0.5"
-        android:background="@drawable/plus_blue"
-        android:freezesText="true"
-        android:includeFontPadding="true"
-        android:inputType="none"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textColorLink="#B180BA"
-        android:textStyle="bold"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reminder_logo"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="SpeakableTextPresentCheck"
-        tools:visibility="visible" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="574dp"
-        android:layout_above="@+id/add_reminder_but"
-        android:layout_below="@id/reminder_logo"
-        android:layout_marginTop="-7dp"
-        android:layout_marginBottom="2dp">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
-
-</RelativeLayout>
+</LinearLayout>
 

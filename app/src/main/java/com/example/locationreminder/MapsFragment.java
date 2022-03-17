@@ -66,6 +66,7 @@ import kotlin.jvm.internal.Intrinsics;
 public class MapsFragment extends Fragment {
     Location location  = new Location("");//provider name is unnecessary
     private GoogleMap map;
+
     int flag=0;
     Marker current_marker;
     // use it to request location updates and get the latest location
@@ -75,6 +76,7 @@ public class MapsFragment extends Fragment {
     @Override
     public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_maps, container, false);
+        setupLocClient();
         //Initialize map fragment
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment supportMapFragment=(SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
@@ -84,7 +86,7 @@ public class MapsFragment extends Fragment {
             public void onMapReady(@NotNull GoogleMap googleMap) {
 
                 map = googleMap;//initialise map
-                setupLocClient();
+
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng latLng) {

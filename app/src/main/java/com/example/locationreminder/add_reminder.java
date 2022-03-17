@@ -96,6 +96,7 @@ public class add_reminder extends AppCompatActivity {
     String time;
     String city ;
     String condition ;
+    String Key="";
 
     Button timeButten;
     TextInputLayout weatherCond;
@@ -120,7 +121,7 @@ public class add_reminder extends AppCompatActivity {
         mydate = findViewById(R.id.date);
         my_weather_switch = findViewById(R.id.weather_switch);
         mydate_switch= findViewById(R.id.date_switch);
-
+        mytime=findViewById(R.id.time);
         mylocation_switch=findViewById(R.id.location_switch);
         mytime_switch=findViewById(R.id.time_switch);
         timeButten = findViewById(R.id.timeButten);
@@ -138,9 +139,14 @@ public class add_reminder extends AppCompatActivity {
             mydescriptioninput.setText(description);
             mydate.setText(date);
             timeButten.setText(time);
+            mytime.setText(time);
             if(!date.equals("")) mydate_switch.setChecked(true);
             if(!time.equals("Select Time")) mytime_switch.setChecked(true);
              if(location!=null)mylocation_switch.setChecked(true);
+             if(extras.getString("from").equals("home")){
+                 Key= extras.getString("Key");
+             }
+
             //The key argument here must match that used in the other activity
         }
 //**************************************************
@@ -199,7 +205,7 @@ public class add_reminder extends AppCompatActivity {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
                         mydate.setText("");
-                        mytime_switch.setChecked(false);
+                        mydate_switch.setChecked(false);
                     }
                 });
                 datePickerDialog.show();
@@ -253,6 +259,48 @@ public class add_reminder extends AppCompatActivity {
             }
         });
 
+        // Time switch
+        //time set
+        Calendar calendar = Calendar.getInstance();
+        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
+
+        mytime_switch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        add_reminder.this,android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        Calendar c =Calendar.getInstance();
+                        c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        c.set(Calendar.MINUTE,minute);
+                        c.set(Calendar.SECOND,0);
+                        String time = hourOfDay + ":" + minute ;
+                        mytime.setText(time);
+                        mytime_switch.setChecked(true);
+
+                    }
+                }, hourOfDay, minute, false);
+
+                timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        if (which == DialogInterface.BUTTON_NEGATIVE)
+                        {
+                            mytime.setText("");
+                            mytime_switch.setChecked(false);
+                        }
+                    }
+                });
+
+                timePickerDialog.show();
+
+
+            }
+        });
+
+
       /*  timeButten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -296,7 +344,7 @@ public class add_reminder extends AppCompatActivity {
                //Fragment fragment =new MapsFragment();
                //Open fragment
                 //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
-                if (isChecked == true) {
+             //   if (isChecked == true) {
                     Intent n = new Intent(add_reminder.this, add_location.class);
                     if (mytitleinput.getText() != null) {
                         n.putExtra("mytitleinput", mytitleinput.getText().toString());
@@ -311,9 +359,9 @@ public class add_reminder extends AppCompatActivity {
                         n.putExtra("mytime", timeButten.getText().toString());
                     }
                     startActivity(n);
-                }else{
+               // }else{
                     Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
-                }
+               // }
             }
         });
 
@@ -336,7 +384,7 @@ public class add_reminder extends AppCompatActivity {
                 String title = mytitleinput.getText().toString();
                 String description = mydescriptioninput.getText().toString();
                 String date = mydate.getText().toString();
-                String time = timeButten.getText().toString();
+                String time = mytime.getText().toString();
                 String city = weatherCity.getText().toString();
                 String condition = autoCompleteTxt.getText().toString();
 
@@ -367,34 +415,53 @@ public class add_reminder extends AppCompatActivity {
                         reminder.put("weather",weather);
                     }
                 }
-                if (my_location_switch.isChecked()){ // Need to fill this for location
-                        //chek data and save them in reminder map
-                }else {
-                    reminder.put("location", location);
-                }
+              //  if (my_location_switch.isChecked()){ // Need to fill this for location
+                reminder.put("location",location);
+               // }else {
+
+               // }
                 if (title.isEmpty() || (date.isEmpty() && time.isEmpty() &&location==null)){// make sure files are filled
                     //are all files filed
                     Toast.makeText(getApplicationContext(), "Please fill Both title and description files", Toast.LENGTH_SHORT).show();
-                }else{
+                }else {
                     reminder.put("title", title);
                     reminder.put("description", description);
+                    if (Key == "") {
+                        documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                //reminder saved successfully
+                                // send feedback and go back to home page
+                                Toast.makeText(getApplicationContext(), "Reminder saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(add_reminder.this, home_page_Activity.class));
+                                //set alarM
+                                setAlarm();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Something went wrong, Please try again!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else{
+                        firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).update(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                //update saved successfully
+                                // send feedback and go back to home page
+                                Toast.makeText(getApplicationContext(), "Update saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(add_reminder.this, home_page_Activity.class));
+                                //set alarM
+                                setAlarm();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Something went wrong, Please try again!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                    documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void unused) {
-                            //reminder saved successfully
-                            // send feedback and go back to home page
-                            Toast.makeText(getApplicationContext(), "Reminder saved successfully, we'll remind you!" , Toast.LENGTH_LONG).show();
-                            startActivity(new Intent(add_reminder.this, home_page_Activity.class));
-                            //set alarM
-                            setAlarm();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getApplicationContext(), "Something went wrong, Pleas try again!" , Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    }
                 }
             }
         });

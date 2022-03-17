@@ -2,22 +2,29 @@ package com.example.locationreminder;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.location.Location;
 
 public class firebasemodel {
     private String title;
     private String description;
     private String date;
     private String time;
-    private List<String> weather=new ArrayList<String>();
+    private List<String> weather=new ArrayList<String>();;
+    private Location location = new Location("");
 
+    public  firebasemodel(){
+
+    }
     public firebasemodel(String title, String description){
         this.title = title;
         this.description = description;
     }
 
-    public String getLocation() {
-        return location;
-    }
+   // public Location getLocation() {
+     //   return location;
+    //}
+
+
 
     public List<String> getWeather() {
         return weather;
@@ -27,9 +34,10 @@ public class firebasemodel {
         return time;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
+    //public void setLocation(Location location) {
+   //     this.location = location;
+  //  }
+
 
     public void setWeather(List<String> weather) {
         this.weather = weather;
@@ -39,14 +47,11 @@ public class firebasemodel {
         this.time = time;
     }
 
-    private String location;
 
 
-    public firebasemodel(){
 
-    }
     //constructor with all parameters
-    public firebasemodel(String title, String description, String date, List<String> weather, String time, String location){
+   public firebasemodel(String title, String description, String date, List<String> weather, String time, Location location){
         this.title = title;
         this.description = description;
         this.date = date;
@@ -70,6 +75,7 @@ public class firebasemodel {
     public String getTitle() {
         return title;
     }
+
     public String getDate() {return  date;}
     public void setDescription(String description) {
         this.description = description;
@@ -78,6 +84,7 @@ public class firebasemodel {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public void setDate(String date) {
         this.date = date;
     }      

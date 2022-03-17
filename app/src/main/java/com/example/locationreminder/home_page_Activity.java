@@ -1,13 +1,19 @@
 package com.example.locationreminder;
 
 import android.content.Intent;
+import android.location.Location;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.graphics.Color;
@@ -19,17 +25,30 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import android.view.ContextMenu;
+
+import android.view.MenuItem;
+
+import java.text.DateFormatSymbols;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class home_page_Activity extends AppCompatActivity {
 
-    Button my_add_reminder_btn;
+
+    TextView my_add_reminder_btn;
     Button my_sign_out_but;
     TextView verifyMsg;
     String userId;
@@ -41,6 +60,7 @@ public class home_page_Activity extends AppCompatActivity {
     StaggeredGridLayoutManager staggeredGridLayoutManager;
     FirebaseUser firebaseUser;
     FirestoreRecyclerAdapter<firebasemodel, ReminderViweHolder> reminderAdapter;
+    public static final String TAG = "";
 
 
     @Override
@@ -86,7 +106,8 @@ public class home_page_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(home_page_Activity.this, LoginActivity.class)); // go to log in page
+                LoginActivity loginActivity=new LoginActivity();
+                startActivity(new Intent(home_page_Activity.this,loginActivity.getClass())); // go to log in page
                 finish();
             }
         });
@@ -100,6 +121,7 @@ public class home_page_Activity extends AppCompatActivity {
         });
 
         //display reminders
+        String[] months = new DateFormatSymbols().getShortMonths();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         fStore = FirebaseFirestore.getInstance();
 
@@ -110,9 +132,29 @@ public class home_page_Activity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ReminderViweHolder reminderViweHolder, int i, @NonNull firebasemodel firebasemodel) {
                 reminderViweHolder.reminderTitle.setText(firebasemodel.getTitle());
                 reminderViweHolder.reminderDescription.setText(firebasemodel.getDescription());
-                reminderViweHolder.reminderDate.setText(firebasemodel.getDate());
+                reminderViweHolder.mytime=firebasemodel.getTime();
+                //reminderViweHolder.mylocation=firebasemodel.getLocation();
+                //reminderViweHolder.myweather=firebasemodel.getWeather();
+                reminderViweHolder.mydate=firebasemodel.getDate();
+                String[] list_date;
+                if(firebasemodel.getDate()!=null) {
+                    list_date = firebasemodel.getDate().split("/");
+
+                    reminderViweHolder.myday.setText(list_date[0]);
+                    reminderViweHolder.mymonth.setText(months[Integer.valueOf(list_date[1])-1]);
+                    reminderViweHolder.myyear.setText(list_date[2]);}
+
+
+                reminderViweHolder.Key=all_user_reminders.getSnapshots().getSnapshot(i).getId();
+
+
+
+
+
+
 
             }
+
 
             @NonNull
             @Override
@@ -120,6 +162,10 @@ public class home_page_Activity extends AppCompatActivity {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
                 return new ReminderViweHolder(view);
             }
+
+
+
+
         };
 
         myrecyclerview = findViewById(R.id.recycleview);
@@ -132,17 +178,76 @@ public class home_page_Activity extends AppCompatActivity {
     public class ReminderViweHolder extends RecyclerView.ViewHolder {
         private TextView reminderTitle;
         private TextView reminderDescription;
-        private TextView reminderDate;
+        private TextView myday;
+        private TextView myyear;
+        private TextView mymonth;
+        private ImageView myoptions;
+        private String mytime="";
+        private String mydate="";
+        private String Key;
+        private Location mylocation;
+        private List<String> myweather= new ArrayList<String>();
         LinearLayout myreminders;
+
 
         public ReminderViweHolder(@NonNull View itemView) {
             super(itemView);
             reminderTitle = itemView.findViewById(R.id.notetitle);
             reminderDescription = itemView.findViewById(R.id.noteDescription);
-            reminderDate = itemView.findViewById(R.id.noteDate);
-            myreminders = itemView.findViewById(R.id.note);
+            myday=itemView.findViewById(R.id.day);
+            myyear=itemView.findViewById(R.id.year);
+            mymonth=itemView.findViewById(R.id.month);
+            myoptions=itemView.findViewById(R.id.options);
+            registerForContextMenu(myoptions);
+
+
+              myoptions.setOnClickListener(new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+                      PopupMenu popupMenu = new PopupMenu(home_page_Activity.this, view);
+                      popupMenu.getMenuInflater().inflate(R.menu.menu, popupMenu.getMenu());
+                      popupMenu.setOnMenuItemClickListener(item -> {
+                          switch (item.getItemId()) {
+                              case R.id.menuDelete:
+                                  fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                      @Override
+                                      public void onSuccess(@NonNull Void unused) {
+                                          Toast.makeText(view.getContext(), "Reminder successfully deleted!", Toast.LENGTH_SHORT).show();
+                                      }
+                                  }).addOnFailureListener(new OnFailureListener() {
+                                      @Override
+                                      public void onFailure(@NonNull Exception e) {
+                                          Log.d("tag", "Error deleting document");
+                                      }
+                                  });
+                                  break;
+                              case R.id.menuEdit:
+                                  Intent n= new Intent(home_page_Activity.this, add_reminder.class);
+                                  n.putExtra("from","home");
+                                  n.putExtra("Key",Key);
+                                  //n.putExtra("mytime",fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).get().getResult().get("time").toString());
+                                  n.putExtra("mytime",mytime);
+                                  n.putExtra("mytitleinput",reminderTitle.getText());
+                                  n.putExtra("location",mylocation);
+                                  n.putExtra("mydescriptioninput",reminderDescription.getText());
+                                  n.putExtra("mydate",mydate);
+                                  // n.putExtra("myweather",myweather);
+
+
+                                  startActivity(n);
+
+
+                                  break;
+                          }
+                          return false;
+                      });
+                      popupMenu.show();
+                  }
+
+              });
 
         }
+
     }
 
     @Override

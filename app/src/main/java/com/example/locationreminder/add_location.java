@@ -99,6 +99,7 @@ public class add_location extends AppCompatActivity {
                 Intent n= new Intent(add_location.this, add_reminder.class);
                 n.putExtra("location", location);
                 n.putExtra("mytitleinput",mytitleinput);
+                n.putExtra("from","location");
                 n.putExtra("mydescriptioninput",mydescriptioninput);
                 n.putExtra("mydate",mydate);
                 n.putExtra("mytime",mytime);
