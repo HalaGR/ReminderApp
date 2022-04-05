@@ -132,10 +132,25 @@ public class home_page_Activity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ReminderViweHolder reminderViweHolder, int i, @NonNull firebasemodel firebasemodel) {
                 reminderViweHolder.reminderTitle.setText(firebasemodel.getTitle());
                 reminderViweHolder.reminderDescription.setText(firebasemodel.getDescription());
-                reminderViweHolder.mytime=firebasemodel.getTime();
+                if(firebasemodel.getTime()==null){
+                    reminderViweHolder.mytime="";
+                }else{
+                reminderViweHolder.mytime=firebasemodel.getTime();}
                 //reminderViweHolder.mylocation=firebasemodel.getLocation();
-                //reminderViweHolder.myweather=firebasemodel.getWeather();
-                reminderViweHolder.mydate=firebasemodel.getDate();
+                if(firebasemodel.getLocation().size()==0){
+                    reminderViweHolder.mylocation_list.add(0.0);
+                    reminderViweHolder.mylocation_list.add(0.0);}
+                else{
+                    reminderViweHolder.mylocation_list=firebasemodel.getLocation();}
+                if(firebasemodel.getWeather().size()==0){
+                reminderViweHolder.myweather.add("");
+                reminderViweHolder.myweather.add("");}
+                else{
+                reminderViweHolder.myweather=firebasemodel.getWeather();}
+                if(firebasemodel.getDate()==null){
+                    reminderViweHolder.mydate="";
+                }else{
+                reminderViweHolder.mydate=firebasemodel.getDate();}
                 String[] list_date;
                 if(firebasemodel.getDate()!=null) {
                     list_date = firebasemodel.getDate().split("/");
@@ -185,8 +200,9 @@ public class home_page_Activity extends AppCompatActivity {
         private String mytime="";
         private String mydate="";
         private String Key;
-        private Location mylocation;
+        private Location mylocation=new Location("");
         private List<String> myweather= new ArrayList<String>();
+        private List<Double> mylocation_list= new ArrayList<Double>();
         LinearLayout myreminders;
 
 
@@ -223,15 +239,18 @@ public class home_page_Activity extends AppCompatActivity {
                                   break;
                               case R.id.menuEdit:
                                   Intent n= new Intent(home_page_Activity.this, add_reminder.class);
-                                  n.putExtra("from","home");
+                                  //n.putExtra("from","home");
                                   n.putExtra("Key",Key);
                                   //n.putExtra("mytime",fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).get().getResult().get("time").toString());
                                   n.putExtra("mytime",mytime);
                                   n.putExtra("mytitleinput",reminderTitle.getText());
+                                  mylocation.setLatitude(mylocation_list.get(0));
+                                  mylocation.setLongitude(mylocation_list.get(1));
                                   n.putExtra("location",mylocation);
                                   n.putExtra("mydescriptioninput",reminderDescription.getText());
                                   n.putExtra("mydate",mydate);
-                                  // n.putExtra("myweather",myweather);
+                                  n.putExtra("mycity",myweather.get(0));
+                                  n.putExtra("mycondition",myweather.get(1));
 
 
                                   startActivity(n);

@@ -9,8 +9,8 @@ public class firebasemodel {
     private String description;
     private String date;
     private String time;
-    private List<String> weather=new ArrayList<String>();;
-    private Location location = new Location("");
+    private List<String> weather=new ArrayList<String>();
+    private List<Double> location = new ArrayList<Double>();
 
     public  firebasemodel(){
 
@@ -20,9 +20,9 @@ public class firebasemodel {
         this.description = description;
     }
 
-   // public Location getLocation() {
-     //   return location;
-    //}
+    public List<Double> getLocation() {
+        return location;
+    }
 
 
 
@@ -34,9 +34,10 @@ public class firebasemodel {
         return time;
     }
 
-    //public void setLocation(Location location) {
-   //     this.location = location;
-  //  }
+    public void setLocation(List<Double> location) {
+        //this.location.set(location);
+        this.location = location;
+    }
 
 
     public void setWeather(List<String> weather) {
@@ -51,12 +52,13 @@ public class firebasemodel {
 
 
     //constructor with all parameters
-   public firebasemodel(String title, String description, String date, List<String> weather, String time, Location location){
+   public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location){
         this.title = title;
         this.description = description;
         this.date = date;
         this.time = time;
         this.location = location;
+       //this.location.set(location);
         this.weather = weather;
     }
     //constructor with time only

@@ -55,6 +55,10 @@ public class add_location extends AppCompatActivity {
     String mydescriptioninput;
     String mydate;
     String mytime;
+    String mycity;
+    String mycondition;
+    static Location location=new Location("");
+    static String Key="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +75,10 @@ public class add_location extends AppCompatActivity {
             mydescriptioninput = extras.getString("mydescriptioninput");
             mydate = extras.getString("mydate");
             mytime = extras.getString("mytime");
+            mycity= extras.getString("mycity");
+            mycondition= extras.getString("mycondition");
+            location=extras.getParcelable("location");
+            Key= extras.getString("Key");
 
             //The key argument here must match that used in the other activity
         }
@@ -83,10 +91,14 @@ public class add_location extends AppCompatActivity {
 
 
                 Intent n= new Intent(add_location.this, add_reminder.class);
+                if(!Key.equals("")){n.putExtra("location", location);}
                 n.putExtra("mytitleinput",mytitleinput);
                 n.putExtra("mydescriptioninput",mydescriptioninput);
                 n.putExtra("mydate",mydate);
                 n.putExtra("mytime",mytime);
+                n.putExtra("mycity",mycity);
+                n.putExtra("mycondition",mycondition);
+                n.putExtra("Key",Key);
                 startActivity(n);
             }
         });
@@ -94,17 +106,29 @@ public class add_location extends AppCompatActivity {
             @Override
             public void onClick(View view) { //save location to firebase
 
-                Location location=((MapsFragment) fragment).getLastLocation();
-
+                location=((MapsFragment) fragment).getLastLocation();
                 Intent n= new Intent(add_location.this, add_reminder.class);
                 n.putExtra("location", location);
                 n.putExtra("mytitleinput",mytitleinput);
-                n.putExtra("from","location");
+               // n.putExtra("from","location");
                 n.putExtra("mydescriptioninput",mydescriptioninput);
                 n.putExtra("mydate",mydate);
                 n.putExtra("mytime",mytime);
+                n.putExtra("mycity",mycity);
+                n.putExtra("mycondition",mycondition);
+                n.putExtra("Key",Key);
+
                 startActivity(n);
             }
         });
+    }
+    static String getKey(){
+        return Key ;
+    }
+    static Double getlatitude(){
+        return location.getLatitude();
+    }
+    static Double getlongtitude(){
+        return location.getLongitude();
     }
 }

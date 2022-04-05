@@ -72,12 +72,10 @@ public class add_reminder extends AppCompatActivity {
 
 
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
-    SwitchCompat mydate_switch,mytime_switch,mylocation_switch;
+    SwitchCompat mydate_switch,mytime_switch,mylocation_switch,my_weather_switch;
     EditText  weatherCity;
     SwitchCompat myTime_switch;
-
     FloatingActionButton mysavebtn;
-    SwitchCompat my_weather_switch;
     SwitchCompat my_location_switch;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -89,7 +87,7 @@ public class add_reminder extends AppCompatActivity {
     AutoCompleteTextView autoCompleteTxt;
     FrameLayout myframe_layout;
 
-    Location location;
+    Location location=new Location("");
     String title;
     String description ;
     String date ;
@@ -98,7 +96,7 @@ public class add_reminder extends AppCompatActivity {
     String condition ;
     String Key="";
 
-    Button timeButten;
+    Button timeButten,exit;
     TextInputLayout weatherCond;
     int hour, minute;
     //set alarm param
@@ -115,6 +113,7 @@ public class add_reminder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_reminder);
+        exit=findViewById(R.id.exit);
         mytitleinput = findViewById(R.id.titleinput);
         mydescriptioninput = findViewById(R.id.descriptioninput);
         mysavebtn = findViewById(R.id.savebtn);
@@ -125,42 +124,11 @@ public class add_reminder extends AppCompatActivity {
         mylocation_switch=findViewById(R.id.location_switch);
         mytime_switch=findViewById(R.id.time_switch);
         timeButten = findViewById(R.id.timeButten);
-
         myframe_layout=findViewById(R.id.frame_layout);
-//**********************************************
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            location = extras.getParcelable("location");
-            title = extras.getString("mytitleinput");
-            description = extras.getString("mydescriptioninput");
-            date = extras.getString("mydate");
-            time = extras.getString("mytime");
-            mytitleinput.setText(title);
-            mydescriptioninput.setText(description);
-            mydate.setText(date);
-            timeButten.setText(time);
-            mytime.setText(time);
-            if(!date.equals("")) mydate_switch.setChecked(true);
-            if(!time.equals("Select Time")) mytime_switch.setChecked(true);
-             if(location!=null)mylocation_switch.setChecked(true);
-             if(extras.getString("from").equals("home")){
-                 Key= extras.getString("Key");
-             }
-
-            //The key argument here must match that used in the other activity
-        }
-//**************************************************
-
-        myframe_layout=findViewById(R.id.frame_layout);
-        timeButten = findViewById(R.id.timeButten);
         weatherCity = findViewById(R.id.weather_city);
         weatherCond = findViewById(R.id.weather_cond);
         myTime_switch = findViewById(R.id.time_switch);
-        my_location_switch = findViewById(R.id.location_switch);
         Log.d("notification", "inside  addReminder#1");
-
-
-
         // choose date UI
         c = Calendar.getInstance();
         createNotificationChannel();
@@ -170,6 +138,33 @@ public class add_reminder extends AppCompatActivity {
         // go to choose weather
         autoCompleteTxt = findViewById(R.id.auto_complete_text);
         add_weather = findViewById(R.id.layout_add_weather); // need to make it visible
+//**********************************************
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            location = extras.getParcelable("location");
+            title = extras.getString("mytitleinput");
+            description = extras.getString("mydescriptioninput");
+            date = extras.getString("mydate");
+            time = extras.getString("mytime");
+            city= extras.getString("mycity");
+            condition= extras.getString("mycondition");
+            Key= extras.getString("Key");
+            mytitleinput.setText(title);
+            mydescriptioninput.setText(description);
+            mydate.setText(date);
+            timeButten.setText(time);
+            mytime.setText(time);
+            weatherCity.setText(city);
+            autoCompleteTxt.setText(condition);
+            if(!date.equals("")) mydate_switch.setChecked(true);
+            if(!city.equals("") && !condition.equals("")) {my_weather_switch.setChecked(true); add_weather.setVisibility(LinearLayout.VISIBLE);}
+            if(!time.equals("Select Time")) mytime_switch.setChecked(true);
+             if(location!=null)mylocation_switch.setChecked(true);
+
+
+            //The key argument here must match that used in the other activity
+        }
+//**************************************************
 
         adapterItems = new ArrayAdapter<String>(this,R.layout.weather_list,weather_conditions);
         autoCompleteTxt.setAdapter(adapterItems);
@@ -179,6 +174,12 @@ public class add_reminder extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
                 Toast.makeText(getApplicationContext(),"Condition: "+item,Toast.LENGTH_SHORT).show();
+            }
+        });
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(add_reminder.this,home_page_Activity.class));
             }
         });
         mydate_switch.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +245,7 @@ public class add_reminder extends AppCompatActivity {
         });
 
         // Time switch
-        myTime_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mytime_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked == true){
@@ -253,6 +254,7 @@ public class add_reminder extends AppCompatActivity {
                 }else{
                     Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
                     timeButten.setText("Select Time");
+                    mytime.setText("");
                     timeButten.setVisibility(View.INVISIBLE);
 
                 }
@@ -337,14 +339,14 @@ public class add_reminder extends AppCompatActivity {
 
        //location set
         //final LocationAdapter adapter=new LocationAdapter(getSupportFragmentManager(),this,1);
-        my_location_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mylocation_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 //Initialize fragment
                //Fragment fragment =new MapsFragment();
                //Open fragment
                 //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
-             //   if (isChecked == true) {
+                if (isChecked == true) {
                     Intent n = new Intent(add_reminder.this, add_location.class);
                     if (mytitleinput.getText() != null) {
                         n.putExtra("mytitleinput", mytitleinput.getText().toString());
@@ -358,10 +360,18 @@ public class add_reminder extends AppCompatActivity {
                     if (timeButten.getText() != null) {
                         n.putExtra("mytime", timeButten.getText().toString());
                     }
+                if ( weatherCity.getText() != null) {
+                    n.putExtra("mycity",  weatherCity.getText().toString());
+                }
+                if (autoCompleteTxt.getText() != null) {
+                    n.putExtra("mycondition",autoCompleteTxt.getText().toString());
+                }
+                 n.putExtra("location",location);
+                   n.putExtra("Key",Key);
                     startActivity(n);
-               // }else{
+                }else{
                     Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
-               // }
+                }
             }
         });
 
@@ -398,13 +408,14 @@ public class add_reminder extends AppCompatActivity {
                         reminder.put("date", date);
                     }
                 }
+                else{reminder.put("date","");}
                 if(myTime_switch.isChecked()) {    //if time is chosen
                     if (time.equals("Select Time")) {
                         Toast.makeText(getApplicationContext(), "Please Choose a Time", Toast.LENGTH_SHORT).show();
                     } else {
                         reminder.put("time", time);
                     }
-                }
+                }else{ reminder.put("time", "");};
                 if (my_weather_switch.isChecked()) {   //if weather condition is chosen and a city
                     if (city.isEmpty() || condition.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Pleas fill Both City and Weather Condition files", Toast.LENGTH_SHORT).show();
@@ -414,19 +425,27 @@ public class add_reminder extends AppCompatActivity {
                         weather.add(condition);
                         reminder.put("weather",weather);
                     }
-                }
-              //  if (my_location_switch.isChecked()){ // Need to fill this for location
-                reminder.put("location",location);
-               // }else {
+                }else{
+                    List<String> weather=new ArrayList<String>();
+                    reminder.put("weather",weather);
 
-               // }
-                if (title.isEmpty() || (date.isEmpty() && time.isEmpty() &&location==null)){// make sure files are filled
+                }
+               if (mylocation_switch.isChecked()){ // Need to fill this for location
+                List<Double> location_list=new ArrayList<Double>();
+                location_list.add(location.getLatitude());
+                location_list.add(location.getLongitude());
+                reminder.put("location",location_list);
+               }else {
+                   List<Double> location_list=new ArrayList<Double>();
+                   reminder.put("location",location_list);
+               }
+                if (title.isEmpty()||description.isEmpty() || (!(mydate_switch.isChecked()) && !(mytime_switch.isChecked()) &&!(mylocation_switch.isChecked()) && !(my_weather_switch.isChecked()))){// make sure files are filled
                     //are all files filed
-                    Toast.makeText(getApplicationContext(), "Please fill Both title and description files", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please fill Both title , description files and one of reminder ways", Toast.LENGTH_SHORT).show();
                 }else {
                     reminder.put("title", title);
                     reminder.put("description", description);
-                    if (Key == "") {
+                    if (Key.equals("")) {
                         documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {

@@ -64,7 +64,7 @@ import java.util.Map;
 import kotlin.jvm.internal.Intrinsics;
 
 public class MapsFragment extends Fragment {
-    Location location  = new Location("");//provider name is unnecessary
+    Location locationF  = new Location("");//provider name is unnecessary
     private GoogleMap map;
 
     int flag=0;
@@ -86,6 +86,10 @@ public class MapsFragment extends Fragment {
             public void onMapReady(@NotNull GoogleMap googleMap) {
 
                 map = googleMap;//initialise map
+                if(!add_location.getKey().equals("")){
+                    getCurrentLocation(add_location.getlatitude(),add_location.getlongtitude());
+
+                }
 
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
@@ -134,15 +138,17 @@ public class MapsFragment extends Fragment {
 
 
           //Location location = (Location) it.getResult();
-          if(flag==0){
-          location = (Location) it.getResult();
-          flag=1;}
-          else{
-          location.setLatitude(latitude) ;
-          location.setLongitude(longitude);}
+          //if(flag==0){
+          //if(locationF.equals(new Location(""))){
+          locationF = (Location) it.getResult();
+         // flag=1;
+          //    }
+         // else{
+          locationF.setLatitude(latitude) ;
+          locationF.setLongitude(longitude);//}
 
-          if (location != null) {
-              LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+          if (locationF != null) {
+              LatLng latLng = new LatLng(locationF.getLatitude(), locationF.getLongitude());
               if(current_marker!=null){
                   current_marker.remove();
               }
@@ -178,7 +184,7 @@ public class MapsFragment extends Fragment {
     }
 
     Location getLastLocation(){
-        return location ;
+        return locationF ;
     }
 
 
