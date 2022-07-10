@@ -52,7 +52,8 @@ public class firebasemodel {
 
 
     //constructor with all parameters
-   public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location){
+
+  /* public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location){
         this.title = title;
         this.description = description;
         this.date = date;
@@ -60,7 +61,7 @@ public class firebasemodel {
         this.location = location;
        //this.location.set(location);
         this.weather = weather;
-    }
+    }*/
     //constructor with time only
     public firebasemodel(String title, String description, String time){
         this.title = title;

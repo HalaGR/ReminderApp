@@ -156,7 +156,7 @@ public class home_page_Activity extends AppCompatActivity {
                     list_date = firebasemodel.getDate().split("/");
 
                     reminderViweHolder.myday.setText(list_date[0]);
-                    reminderViweHolder.mymonth.setText(months[Integer.valueOf(list_date[1])-1]);
+                    reminderViweHolder.mymonth.setText(months[Integer.parseInt(list_date[1])-1]);
                     reminderViweHolder.myyear.setText(list_date[2]);}
 
 
