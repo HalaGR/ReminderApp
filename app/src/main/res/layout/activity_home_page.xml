@@ -55,12 +55,15 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@android:color/transparent">
 
         <ImageView
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:id="@+id/noDataImage"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:id="@+id/firstnote"
+            android:visibility="invisible"
+            android:background="@drawable/firstnotee"
             android:layout_gravity="center"/>
 
             <androidx.recyclerview.widget.RecyclerView

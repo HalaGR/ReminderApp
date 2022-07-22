@@ -106,7 +106,7 @@ public class add_location extends AppCompatActivity {
             @Override
             public void onClick(View view) { //save location to firebase
 
-                location=((MapsFragment) fragment).getLastLocation();
+                location=((MapsFragment) fragment).getLastLocation_();
                 Intent n= new Intent(add_location.this, add_reminder.class);
                 n.putExtra("location", location);
                 n.putExtra("mytitleinput",mytitleinput);

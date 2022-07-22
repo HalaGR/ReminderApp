@@ -1,7 +1,9 @@
 package com.example.locationreminder;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -29,6 +32,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,9 +47,11 @@ import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 
-public class home_page_Activity extends AppCompatActivity {
+public class home_page_Activity extends BaseActivity {
 
 
     TextView my_add_reminder_btn;
@@ -54,6 +60,7 @@ public class home_page_Activity extends AppCompatActivity {
     String userId;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
+    ImageView myfirstnote;
 
     //list of reminders
     RecyclerView myrecyclerview;
@@ -61,7 +68,7 @@ public class home_page_Activity extends AppCompatActivity {
     FirebaseUser firebaseUser;
     FirestoreRecyclerAdapter<firebasemodel, ReminderViweHolder> reminderAdapter;
     public static final String TAG = "";
-
+    List<firebasemodel> namedGeofences= new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,10 +81,34 @@ public class home_page_Activity extends AppCompatActivity {
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
+        //this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         //************************************
 
+        //**************************************************start-for location notification-are we there yet************************************************
+        // region GeofenceControllerListener
+
+        /* GeofenceController.GeofenceControllerListener geofenceControllerListener = new GeofenceController.GeofenceControllerListener() {
+            @Override
+            public void onGeofencesUpdated() {
+
+                 refresh();
+            }
+
+            @Override
+            public void onError() {
+
+                showErrorToast();
+            }
+        };*/
+//        GeofenceController.getInstance(). setNamedGeofences(namedGeofences,geofenceControllerListener);
+        //  private void showErrorToast() {
+        //    Toast.makeText(getActivity(), getActivity().getString(R.string.Toast_Error), Toast.LENGTH_SHORT).show();
+        // }
+
+        // endregion
         //************************************
+        //**************************************************end-for location notification-are we there yet************************************************
         if (!user.isEmailVerified()) {
             verifyMsg.setVisibility(View.VISIBLE);
             verifyMsg.setOnClickListener(new View.OnClickListener() {
@@ -121,17 +152,25 @@ public class home_page_Activity extends AppCompatActivity {
         });
 
         //display reminders
+
         String[] months = new DateFormatSymbols().getShortMonths();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         fStore = FirebaseFirestore.getInstance();
-
+        myfirstnote=findViewById(R.id.firstnote);
         Query query = fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").orderBy("title", Query.Direction.ASCENDING);
+        //if (fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").get().getResult().getDocuments().isEmpty()) myfirstnote.setVisibility(View.VISIBLE);
         FirestoreRecyclerOptions<firebasemodel> all_user_reminders = new FirestoreRecyclerOptions.Builder<firebasemodel>().setQuery(query, firebasemodel.class).build();
+       // if( all_user_reminders.getSnapshots().isEmpty())myfirstnote.setVisibility(View.VISIBLE);
         reminderAdapter = new FirestoreRecyclerAdapter<firebasemodel, ReminderViweHolder>(all_user_reminders) {
             @Override
             protected void onBindViewHolder(@NonNull ReminderViweHolder reminderViweHolder, int i, @NonNull firebasemodel firebasemodel) {
+                namedGeofences.add(firebasemodel);
+                //if(firebasemodel==null&& i==0)myfirstnote.setVisibility(View.VISIBLE);
                 reminderViweHolder.reminderTitle.setText(firebasemodel.getTitle());
                 reminderViweHolder.reminderDescription.setText(firebasemodel.getDescription());
+                if(firebasemodel.getReminder()!=null){
+                    reminderViweHolder.reminder=firebasemodel.getReminder();
+                }
                 if(firebasemodel.getTime()==null){
                     reminderViweHolder.mytime="";
                 }else{
@@ -152,7 +191,7 @@ public class home_page_Activity extends AppCompatActivity {
                 }else{
                 reminderViweHolder.mydate=firebasemodel.getDate();}
                 String[] list_date;
-                if(firebasemodel.getDate()!=null) {
+                if(firebasemodel.getDate()!=null && firebasemodel.getDate()!="") {
                     list_date = firebasemodel.getDate().split("/");
 
                     reminderViweHolder.myday.setText(list_date[0]);
@@ -198,6 +237,7 @@ public class home_page_Activity extends AppCompatActivity {
         private TextView mymonth;
         private ImageView myoptions;
         private String mytime="";
+        private List<Object> reminder;
         private String mydate="";
         private String Key;
         private Location mylocation=new Location("");
@@ -228,6 +268,10 @@ public class home_page_Activity extends AppCompatActivity {
                                   fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                       @Override
                                       public void onSuccess(@NonNull Void unused) {
+                                          if (reminder!=null){
+                                              if (reminder.size()!=0)
+                                              {removeReminder(get((String)reminder.get(0)));}
+                                          }
                                           Toast.makeText(view.getContext(), "Reminder successfully deleted!", Toast.LENGTH_SHORT).show();
                                       }
                                   }).addOnFailureListener(new OnFailureListener() {
@@ -251,6 +295,12 @@ public class home_page_Activity extends AppCompatActivity {
                                   n.putExtra("mydate",mydate);
                                   n.putExtra("mycity",myweather.get(0));
                                   n.putExtra("mycondition",myweather.get(1));
+                                  if (reminder!=null){
+                                      if (reminder.size()!=0){
+                                          n.putExtra("from","edit");
+                                          n.putExtra("locationID",(String)reminder.get(0));
+                                      }
+                                  }
 
 
                                   startActivity(n);
@@ -284,4 +334,39 @@ public class home_page_Activity extends AppCompatActivity {
         }
 
     }
+    //*************************
+    private void refresh() {
+
+
+        this.invalidateOptionsMenu();
+
+    }
+
+    private void showErrorToast() {
+        Toast.makeText(this,"There was an error. Please try again.", Toast.LENGTH_SHORT).show();
+    }
+    private final Reminder get(String id){
+        return this.getRepository().get(id);
+    }
+
+
+    private final void removeReminder(Reminder reminder) {
+        this.getRepository().remove(reminder,(Callable) (new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                Snackbar.make((CoordinatorLayout) home_page_Activity.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();
+                return null;
+            }
+        }),  (Function) (new Function<String,Void>() {
+            @Override
+            public Void apply(String it) {
+                Snackbar.make((CoordinatorLayout) home_page_Activity.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
+                return null;
+            }
+
+
+        }));
+
+    }
+
 }

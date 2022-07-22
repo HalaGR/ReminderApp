@@ -19,6 +19,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- <uses-permission android:name="android.permission.MAPS_RECEIVE" /> -->
     <!--
  <uses-permission android:name="android.permission.READ_GSERVICES" />
@@ -33,7 +34,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        android:theme="@style/Theme.Material3.DynamicColors.DayNight">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -64,28 +65,45 @@
             android:exported="true" />
         <activity
             android:name=".home_page_Activity"
-            android:exported="true" />
-        <activity
-            android:name=".add_location"
-            android:exported="true"
-            android:theme="@style/Theme.Material3.Dark.NoActionBar"/>
-
-        <activity
-            android:name=".add_reminder"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Material3.Dark.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.Material3.Dark.NoActionBar">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".add_location"
+            android:exported="true"
+            />
 
+        <activity
+            android:name=".add_reminder"
+            android:exported="true"
+            android:screenOrientation="portrait"
+
+            />
+
+        <activity android:name=".NewReminderActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".ControlActivity"
+            android:exported="true"
+            >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".GeofenceBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".GeofenceTransitionsJobIntentService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <uses-library android:name="org.apache.http.legacy" android:required="false" />
         <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true" />

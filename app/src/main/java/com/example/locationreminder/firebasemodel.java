@@ -9,6 +9,7 @@ public class firebasemodel {
     private String description;
     private String date;
     private String time;
+    private List<Object> reminder=new ArrayList<Object>();
     private List<String> weather=new ArrayList<String>();
     private List<Double> location = new ArrayList<Double>();
 
@@ -23,7 +24,9 @@ public class firebasemodel {
     public List<Double> getLocation() {
         return location;
     }
-
+    public List<Object> getReminder() {
+        return reminder;
+    }
 
 
     public List<String> getWeather() {
@@ -48,11 +51,13 @@ public class firebasemodel {
         this.time = time;
     }
 
-
+    public void setReminder(List<Object> reminder) {
+        this.reminder = reminder;
+    }
 
 
     //constructor with all parameters
-   public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location){
+   public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location,List<Object> reminder){
         this.title = title;
         this.description = description;
         this.date = date;
@@ -60,6 +65,7 @@ public class firebasemodel {
         this.location = location;
        //this.location.set(location);
         this.weather = weather;
+        this.reminder=reminder;
     }
     //constructor with time only
     public firebasemodel(String title, String description, String time){

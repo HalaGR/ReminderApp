@@ -86,10 +86,10 @@ public class MapsFragment extends Fragment {
             public void onMapReady(@NotNull GoogleMap googleMap) {
 
                 map = googleMap;//initialise map
-                if(!add_location.getKey().equals("")){
+
                     getCurrentLocation(add_location.getlatitude(),add_location.getlongtitude());
 
-                }
+
 
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
@@ -138,14 +138,15 @@ public class MapsFragment extends Fragment {
 
 
           //Location location = (Location) it.getResult();
-          //if(flag==0){
+          if(flag==0 && add_location.getlatitude()==0.0&&add_location.getlongtitude()==0.0){
           //if(locationF.equals(new Location(""))){
           locationF = (Location) it.getResult();
-         // flag=1;
-          //    }
-         // else{
+           flag=1;
+              }
+          else{
+          //if(!add_location.getKey().equals("")&&add_location.getlatitude()!=0&&add_location.getlongtitude()!=0 &&flag ==0){
           locationF.setLatitude(latitude) ;
-          locationF.setLongitude(longitude);//}
+          locationF.setLongitude(longitude);flag=1;}
 
           if (locationF != null) {
               LatLng latLng = new LatLng(locationF.getLatitude(), locationF.getLongitude());
@@ -183,7 +184,7 @@ public class MapsFragment extends Fragment {
 
     }
 
-    Location getLastLocation(){
+    Location getLastLocation_(){
         return locationF ;
     }
 

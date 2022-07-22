@@ -1,5 +1,6 @@
 package com.example.locationreminder;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -37,16 +38,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-
+//import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.gms.common.internal.ICancelToken;
 //import com.example.locationreminder.databinding.ActivityMainBinding;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,13 +70,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 
-public class add_reminder extends AppCompatActivity {
+public class add_reminder extends BaseActivity {
 
 
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
-    SwitchCompat mydate_switch,mytime_switch,mylocation_switch,my_weather_switch;
+    SwitchCompat mydate_switch,mytime_switch,mylocation_switch,remindmethere_switch,my_weather_switch;
     EditText  weatherCity;
     SwitchCompat myTime_switch;
     FloatingActionButton mysavebtn;
@@ -93,8 +99,11 @@ public class add_reminder extends AppCompatActivity {
     String date ;
     String time;
     String city ;
+    String ifLocation;
     String condition ;
     String Key="";
+    String from="";
+    String locationID="";
 
     Button timeButten,exit;
     TextInputLayout weatherCond;
@@ -103,7 +112,12 @@ public class add_reminder extends AppCompatActivity {
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private Calendar c;
-
+//********************8
+    private String id;
+    private LatLng latLng;
+    private Double radius;
+    private String message;
+    //**********************8
 
 
 
@@ -122,6 +136,7 @@ public class add_reminder extends AppCompatActivity {
         mydate_switch= findViewById(R.id.date_switch);
         mytime=findViewById(R.id.time);
         mylocation_switch=findViewById(R.id.location_switch);
+        remindmethere_switch=findViewById(R.id.remindmethere_switch);
         mytime_switch=findViewById(R.id.time_switch);
         timeButten = findViewById(R.id.timeButten);
         myframe_layout=findViewById(R.id.frame_layout);
@@ -149,6 +164,16 @@ public class add_reminder extends AppCompatActivity {
             city= extras.getString("mycity");
             condition= extras.getString("mycondition");
             Key= extras.getString("Key");
+            ifLocation= extras.getString("ifLocation");
+            from= extras.getString("from");
+            locationID= extras.getString("locationID");
+
+            //******************************************************
+           // id =extras.getString("id");
+           // latLng=(LatLng)extras.get("LatLng");
+           // radius= extras.getDouble("Radius");
+           // message= extras.getString("Message");
+            //*******************************************************
             mytitleinput.setText(title);
             mydescriptioninput.setText(description);
             mydate.setText(date);
@@ -156,12 +181,12 @@ public class add_reminder extends AppCompatActivity {
             mytime.setText(time);
             weatherCity.setText(city);
             autoCompleteTxt.setText(condition);
-            if(!date.equals("")) mydate_switch.setChecked(true);
-            if(!city.equals("") && !condition.equals("")) {my_weather_switch.setChecked(true); add_weather.setVisibility(LinearLayout.VISIBLE);}
-            if(!time.equals("Select Time")) mytime_switch.setChecked(true);
-             if(location!=null)mylocation_switch.setChecked(true);
-
-
+          if(date!=null) {if(!date.equals("")) mydate_switch.setChecked(true);}
+            if(city!=null){ if(!city.equals("") && !condition.equals("")) {my_weather_switch.setChecked(true); add_weather.setVisibility(LinearLayout.VISIBLE);}}
+            if(time!=null) {if(!time.equals("")) mytime_switch.setChecked(true);}
+             if(location!=null){ if(location.getLatitude()!=0.0&&location.getLongitude()!=0.0)mylocation_switch.setChecked(true);}
+            if(ifLocation!=null){if(ifLocation.equals("yes"))remindmethere_switch.setChecked(true);}
+           if (locationID!=null){ if (!locationID.equals("")){remindmethere_switch.setChecked(true);}}
             //The key argument here must match that used in the other activity
         }
 //**************************************************
@@ -274,7 +299,7 @@ public class add_reminder extends AppCompatActivity {
                         add_reminder.this,android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
-                        Calendar c =Calendar.getInstance();
+                        //Calendar c =Calendar.getInstance();
                         c.set(Calendar.HOUR_OF_DAY,hourOfDay);
                         c.set(Calendar.MINUTE,minute);
                         c.set(Calendar.SECOND,0);
@@ -358,7 +383,7 @@ public class add_reminder extends AppCompatActivity {
                         n.putExtra("mydate", mydate.getText().toString());
                     }
                     if (timeButten.getText() != null) {
-                        n.putExtra("mytime", timeButten.getText().toString());
+                        n.putExtra("mytime", mytime.getText().toString());
                     }
                 if ( weatherCity.getText() != null) {
                     n.putExtra("mycity",  weatherCity.getText().toString());
@@ -374,13 +399,51 @@ public class add_reminder extends AppCompatActivity {
                 }
             }
         });
+        remindmethere_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                //Initialize fragment
+                //Fragment fragment =new MapsFragment();
+                //Open fragment
+                //getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout,fragment).commit();
+
+                if (isChecked == true) {
+                    Intent n = new Intent(add_reminder.this, ControlActivity.class);
+                    if (mytitleinput.getText() != null) {
+                        n.putExtra("mytitleinput", mytitleinput.getText().toString());
+                    }
+                    if (mydescriptioninput.getText() != null) {
+                        n.putExtra("mydescriptioninput", mydescriptioninput.getText().toString());
+                    }
+                    if (mydate.getText() != null) {
+                        n.putExtra("mydate", mydate.getText().toString());
+                    }
+                    if (timeButten.getText() != null) {
+                        n.putExtra("mytime", mytime.getText().toString());
+                    }
+                    if ( weatherCity.getText() != null) {
+                        n.putExtra("mycity",  weatherCity.getText().toString());
+                    }
+                    if (autoCompleteTxt.getText() != null) {
+                        n.putExtra("mycondition",autoCompleteTxt.getText().toString());
+                    }
+                    n.putExtra("location",location);
+                    n.putExtra("Key",Key);
+                    n.putExtra("from",from);
+                    n.putExtra("locationID",locationID);
+                    startActivity(n);
+                }else{
+                    Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 
 
         Toolbar toolbar = findViewById(R.id.toolbarofaddreminder);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //get current user database
         firebaseAuth = FirebaseAuth.getInstance();
@@ -397,10 +460,34 @@ public class add_reminder extends AppCompatActivity {
                 String time = mytime.getText().toString();
                 String city = weatherCity.getText().toString();
                 String condition = autoCompleteTxt.getText().toString();
+                //new  NewReminderActivity().addReminder(new Reminder(id,latLng,radius,message));
+
 
                 // add reminder to database
                 DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
                 Map<String, Object> reminder = new HashMap<>(); // save reminder data in a map
+
+                List<Object> reminderLocation_list=new ArrayList<Object>();
+                if (remindmethere_switch.isChecked()) {
+                    Reminder reminder2=getLast();
+                // List<Object> reminderLocation_list=new ArrayList<Object>();
+                    if(!locationID.equals("")){
+                        reminder2=get(locationID);
+                    }else{addReminder();}
+                     if(from.equals("edited")){
+                        removeReminder(get(locationID));
+                         reminder2=getLast();
+                         addReminder();}
+                reminderLocation_list.add(reminder2.getId());
+                reminderLocation_list.add(reminder2.getLatLng());
+                reminderLocation_list.add(reminder2.getRadius());
+                reminderLocation_list.add(reminder2.getMessage());
+
+                reminder.put("reminder",reminderLocation_list);
+                }else{
+                    reminder.put("reminder",reminderLocation_list);
+                }
+                //reminder.put("reminder",getLast());
                 if (mydate_switch.isChecked()) { // if Date is chosen
                     if (date.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Please Choose a Date", Toast.LENGTH_SHORT).show();
@@ -415,10 +502,10 @@ public class add_reminder extends AppCompatActivity {
                     } else {
                         reminder.put("time", time);
                     }
-                }else{ reminder.put("time", "");};
+                }else{ reminder.put("time", "");}
                 if (my_weather_switch.isChecked()) {   //if weather condition is chosen and a city
                     if (city.isEmpty() || condition.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Pleas fill Both City and Weather Condition files", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Please fill Both City and Weather Condition files", Toast.LENGTH_SHORT).show();
                     } else {
                         List<String> weather=new ArrayList<String>();
                         weather.add(city);
@@ -434,18 +521,26 @@ public class add_reminder extends AppCompatActivity {
                 List<Double> location_list=new ArrayList<Double>();
                 location_list.add(location.getLatitude());
                 location_list.add(location.getLongitude());
+                //*******************
+                 //  Intent n = new Intent(add_reminder.this, ControlActivityForDelete.class);
+                //   n.putExtra("getLatitude",location.getLatitude());
+                //   n.putExtra("getLongitude",location.getLongitude());
+                //   startActivity(n);
+
+               // *********************
                 reminder.put("location",location_list);
+
                }else {
                    List<Double> location_list=new ArrayList<Double>();
                    reminder.put("location",location_list);
                }
-                if (title.isEmpty()||description.isEmpty() || (!(mydate_switch.isChecked()) && !(mytime_switch.isChecked()) &&!(mylocation_switch.isChecked()) && !(my_weather_switch.isChecked()))){// make sure files are filled
+                if (title.isEmpty()||description.isEmpty() || (!(mydate_switch.isChecked()) && !(mytime_switch.isChecked()) &&!(mylocation_switch.isChecked())&&!(remindmethere_switch.isChecked()) && !(my_weather_switch.isChecked()))){// make sure files are filled
                     //are all files filed
                     Toast.makeText(getApplicationContext(), "Please fill Both title , description files and one of reminder ways", Toast.LENGTH_SHORT).show();
                 }else {
                     reminder.put("title", title);
                     reminder.put("description", description);
-                    if (Key.equals("")) {
+                   if(Key!=null){ if (Key.equals("")) {
                         documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -462,7 +557,7 @@ public class add_reminder extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Something went wrong, Please try again!", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }else{
+                    } else {
                         firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).update(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -482,9 +577,56 @@ public class add_reminder extends AppCompatActivity {
 
                     }
                 }
+                }
             }
         });
+
     }
+    //******************************added to translate add-remove to add_reminder -start**********************
+    public final void addReminder() {
+        this.getRepository().add(this.getRepository().getLast(),(Callable) (new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                add_reminder.this.setResult(Activity.RESULT_OK);
+                add_reminder.this.finish();
+                return null;
+            }
+        }),(Function) (new Function<String,Void>() {
+            @Override
+            public Void apply(String it) {
+                Snackbar.make((CoordinatorLayout)add_reminder.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
+                return null;
+            }
+        }));
+    }
+    public final Reminder getLast() {
+    return this.getRepository().getLast();}
+
+
+    private final Reminder get(String id){
+        return this.getRepository().get(id);
+    }
+
+
+    private final void removeReminder(Reminder reminder) {
+        this.getRepository().remove(reminder,(Callable) (new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();
+                return null;
+            }
+        }),  (Function) (new Function<String,Void>() {
+            @Override
+            public Void apply(String it) {
+                Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
+                return null;
+            }
+
+
+        }));
+
+    }
+    //******************************added to translate add-remove to add_reminder -end**********************
 
     private void setAlarm() {
         Log.d("notification", "inside setAlarm in addReminder" );
@@ -495,10 +637,11 @@ public class add_reminder extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
         Toast.makeText(this, "Alarm set Successfully" , Toast.LENGTH_SHORT).show();
 
+
     }
 
 
-    private void createNotificationChannel() {
+   private void createNotificationChannel() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "foxandroidReminderChannel";
