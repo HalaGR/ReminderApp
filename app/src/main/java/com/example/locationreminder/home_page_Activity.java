@@ -176,16 +176,8 @@ public class home_page_Activity extends BaseActivity {
                 }else{
                 reminderViweHolder.mytime=firebasemodel.getTime();}
                 //reminderViweHolder.mylocation=firebasemodel.getLocation();
-                if(firebasemodel.getLocation().size()==0){
-                    reminderViweHolder.mylocation_list.add(0.0);
-                    reminderViweHolder.mylocation_list.add(0.0);}
-                else{
-                    reminderViweHolder.mylocation_list=firebasemodel.getLocation();}
-                if(firebasemodel.getWeather().size()==0){
-                reminderViweHolder.myweather.add("");
-                reminderViweHolder.myweather.add("");}
-                else{
-                reminderViweHolder.myweather=firebasemodel.getWeather();}
+
+
                 if(firebasemodel.getDate()==null){
                     reminderViweHolder.mydate="";
                 }else{
@@ -241,7 +233,6 @@ public class home_page_Activity extends BaseActivity {
         private String mydate="";
         private String Key;
         private Location mylocation=new Location("");
-        private List<String> myweather= new ArrayList<String>();
         private List<Double> mylocation_list= new ArrayList<Double>();
         LinearLayout myreminders;
 
@@ -293,8 +284,6 @@ public class home_page_Activity extends BaseActivity {
                                   n.putExtra("location",mylocation);
                                   n.putExtra("mydescriptioninput",reminderDescription.getText());
                                   n.putExtra("mydate",mydate);
-                                  n.putExtra("mycity",myweather.get(0));
-                                  n.putExtra("mycondition",myweather.get(1));
                                   if (reminder!=null){
                                       if (reminder.size()!=0){
                                           n.putExtra("from","edit");

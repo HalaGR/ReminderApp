@@ -57,10 +57,7 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
     String mydescriptioninput;
     String mydate;
     String mytime;
-    String mycity;
-    String mycondition;
     String from="";
-    static Location location=new Location("");
     static String Key="";
     String locationID;
     //********************************
@@ -87,8 +84,6 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
                 intent.putExtra("mydescriptioninput",mydescriptioninput);
                 intent.putExtra("mydate",mydate);
                 intent.putExtra("mytime",mytime);
-                intent.putExtra("mycity",mycity);
-                intent.putExtra("mycondition",mycondition);
                 intent.putExtra("Key",Key);
                 intent.putExtra("from",from);
                 intent.putExtra("locationID",locationID);
@@ -108,9 +103,6 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
             mydescriptioninput = extras.getString("mydescriptioninput");
             mydate = extras.getString("mydate");
             mytime = extras.getString("mytime");
-            mycity= extras.getString("mycity");
-            mycondition= extras.getString("mycondition");
-            location=extras.getParcelable("location");
             Key= extras.getString("Key");
             from= extras.getString("from");
             locationID= extras.getString("locationID");
@@ -129,8 +121,6 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
                 n.putExtra("mydescriptioninput",mydescriptioninput);
                 n.putExtra("mydate",mydate);
                 n.putExtra("mytime",mytime);
-                n.putExtra("mycity",mycity);
-                n.putExtra("mycondition",mycondition);
                 n.putExtra("Key",Key);
                 n.putExtra("ifLocation","no");
                 startActivity(n);

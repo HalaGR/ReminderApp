@@ -10,8 +10,6 @@ public class firebasemodel {
     private String date;
     private String time;
     private List<Object> reminder=new ArrayList<Object>();
-    private List<String> weather=new ArrayList<String>();
-    private List<Double> location = new ArrayList<Double>();
 
     public  firebasemodel(){
 
@@ -21,31 +19,20 @@ public class firebasemodel {
         this.description = description;
     }
 
-    public List<Double> getLocation() {
-        return location;
-    }
     public List<Object> getReminder() {
         return reminder;
     }
 
 
-    public List<String> getWeather() {
-        return weather;
-    }
+
 
     public String getTime() {
         return time;
     }
 
-    public void setLocation(List<Double> location) {
-        //this.location.set(location);
-        this.location = location;
-    }
 
 
-    public void setWeather(List<String> weather) {
-        this.weather = weather;
-    }
+
 
     public void setTime(String time) {
         this.time = time;
@@ -67,9 +54,6 @@ public class firebasemodel {
         this.description = description;
         this.date = date;
         this.time = time;
-        this.location = location;
-       //this.location.set(location);
-        this.weather = weather;
         this.reminder=reminder;
     }
 

@@ -70,10 +70,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".add_location"
-            android:exported="true"
-            />
 
         <activity
             android:name=".add_reminder"

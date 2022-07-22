@@ -149,25 +149,14 @@
                     android:thumb="@drawable/thumb"
                     app:showText="true"
                     app:track="@drawable/track" />
-                <EditText
-                    android:id="@+id/date1"
-                    android:layout_width="150dp"
-                    android:layout_height="35dp"
-                    android:background="@android:color/transparent"
-                    android:textColor="@color/DarkSlateBlue"
 
-                    android:textColorHint="@color/SlateGray"
-                    android:textSize="12sp"
-                    android:visibility="invisible"
-                    tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
-                </EditText>
 
                 <EditText
                     android:id="@+id/date"
                     android:layout_width="100dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="-270dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="0dp"
                     android:background="@android:color/transparent"
                     android:hint=""
                     android:textColor="@color/Gray"
@@ -211,19 +200,6 @@
                     android:textSize="20dp">
 
                 </TextView>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/location_switch"
-                    android:layout_width="76dp"
-                    android:layout_height="56dp"
-                    android:baselineAligned="false"
-                    android:textOff="off"
-                    android:textOn="on"
-                    android:padding="10dp"
-                    android:thumb="@drawable/thumb"
-                    app:showText="true"
-                    app:track="@drawable/track" />
-
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/remindmethere_switch"
@@ -271,18 +247,7 @@
                     android:textSize="20dp">
 
                 </TextView>
-                <EditText
-                    android:id="@+id/time"
-                    android:layout_width="80dp"
-                    android:layout_height="20dp"
-                    android:layout_marginStart="-52dp"
-                    android:layout_marginTop="18dp"
-                    android:background="@android:color/transparent"
-                    android:hint=""
-                    android:textColor="@color/Gray"
 
-                    android:textColorHint="@color/SlateGray"
-                    android:textSize="12sp"/>
 
 
 
@@ -297,117 +262,26 @@
                     android:thumb="@drawable/thumb"
                     app:showText="true"
                     app:track="@drawable/track" />
-
-                <Button
-                    android:id="@+id/timeButten"
-                    android:layout_width="141dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/button_bg"
-                    android:onClick="popTimeClicker"
-                    android:padding="10dp"
-                    android:text="Select Time"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:visibility="invisible">
-
-                </Button>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_weather_switch"
-                android:layout_width="match_parent"
-                android:layout_height="73dp"
-                android:layout_below="@+id/layout_Time_switch"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                android:background="@drawable/edit_text_bg"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/image_weather"
-                    android:layout_width="70dp"
-                    android:layout_height="80dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="0dp"
-                    android:contentDescription="reminde_me"
-                    android:foregroundGravity="center"
-                    android:padding="10dp"
-                    app:srcCompat="@drawable/weather_icon" />
-
-                <TextView
-                    android:layout_width="82dp"
-                    android:layout_height="41dp"
-                    android:layout_marginStart="0dp"
-                    android:text="Weather"
-                    android:textColor="@color/black"
-                    android:textSize="20dp">
-
-                </TextView>
-
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/weather_switch"
-                    android:layout_width="72dp"
-                    android:layout_height="56dp"
-                    android:baselineAligned="false"
-                    android:textOff="off"
-                    android:textOn="on"
-                    android:padding="10dp"
-                    android:thumb="@drawable/thumb"
-                    app:showText="true"
-                    app:track="@drawable/track" />
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:id="@+id/layout_add_weather"
-                android:layout_width="364dp"
-                android:layout_height="134dp"
-                android:layout_below="@+id/layout_weather_switch"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="0dp"
-                android:background="@drawable/edit_text_bg"
-                android:orientation="vertical"
-                android:padding="0dp"
-                android:visibility="invisible">
-
                 <EditText
-                    android:id="@+id/weather_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="50dp"
-                    android:text=""
-                    android:hint="Enter City Name"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/black">
+                    android:id="@+id/time"
+                    android:layout_width="80dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@android:color/transparent"
+                    android:hint=""
+                    android:textColor="@color/Gray"
 
-                </EditText>
+                    android:textColorHint="@color/SlateGray"
+                    android:textSize="12sp"/>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/weather_cond"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="select Weather Condition"
-                    android:minHeight="50dp"
-                    android:textColorHint="@color/black"
-                    >
 
-                    <AutoCompleteTextView
-                        android:id="@+id/auto_complete_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:inputType="none"
-                        android:minHeight="50dp"
-                        android:textAppearance="@style/TextStyle"
-                        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck">
-                    </AutoCompleteTextView>
-                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+
+
+
+
 
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -415,8 +289,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="280dp"
-                android:layout_marginTop="-140dp"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/ic_baseline_done_24"
+                app:backgroundTint="@color/transparent"
+                android:outlineAmbientShadowColor="@color/transparent"
+                android:outlineSpotShadowColor="@color/transparent"
                 >
 
             </com.google.android.material.floatingactionbutton.FloatingActionButton>
