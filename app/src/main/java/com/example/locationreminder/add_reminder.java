@@ -41,6 +41,7 @@ import androidx.appcompat.widget.Toolbar;
 //import android.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.gms.common.internal.ICancelToken;
@@ -637,6 +638,22 @@ public class add_reminder extends BaseActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
         Toast.makeText(this, "Alarm set Successfully" , Toast.LENGTH_SHORT).show();
 
+
+       /* //Snooze button
+        Intent snoozeIntent = new Intent(this, AlarmReceiver.class);
+       // snoozeIntent.setAction("Snooze");
+        snoozeIntent.putExtra("Snooze", 0);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(this, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "foxandroid")
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("My notification")
+                .setContentText("Hello World!")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.snooze_icon, "Snooze",
+                        snoozePendingIntent);*/
 
     }
 

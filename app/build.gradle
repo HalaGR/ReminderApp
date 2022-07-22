@@ -34,6 +34,7 @@ android {
     }
     buildToolsVersion '31.0.0'
     compileSdk 32
+
 }
 
 dependencies {

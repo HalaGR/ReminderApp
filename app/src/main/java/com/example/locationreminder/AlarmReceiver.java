@@ -11,6 +11,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class    AlarmReceiver extends BroadcastReceiver {
+
     public AlarmReceiver(){
 
     }
@@ -22,6 +23,14 @@ public class    AlarmReceiver extends BroadcastReceiver {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,0);
 
+        //Snooze button
+        Intent snoozeIntent = new Intent(context, AlarmReceiver.class);
+        // snoozeIntent.setAction("Snooze");
+        snoozeIntent.putExtra("Snooze", 0);
+        PendingIntent snoozePendingIntent =
+                PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
+
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"foxandroid")
                 .setSmallIcon(R.drawable.ic_launcher_background)
                 .setContentTitle("Foxandroid Alarm Manager")
@@ -29,12 +38,15 @@ public class    AlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setContentIntent(pendingIntent);
+                .setContentIntent(pendingIntent)
+                .addAction(R.drawable.snooze_icon, "Snooze",
+                snoozePendingIntent);
         Log.d("notification", "inside alarm receiver2");
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(123,builder.build());
         Log.d("notification", "inside alarm receiver3");
+        
 
 
     }
