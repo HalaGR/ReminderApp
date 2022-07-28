@@ -12,6 +12,8 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.List;
 
 
@@ -37,11 +39,16 @@ public final class GeofenceTransitionsJobIntentService extends JobIntentService 
             Reminder reminder = this.getFirstReminder(event.getTriggeringGeofences());
             String message = reminder != null ? reminder.getMessage() : null;
             LatLng latLng = reminder != null ? reminder.getLatLng() : null;
-            if (message != null && latLng != null) {
-                Utils.sendNotification((Context)this, message, latLng);
+            if (message != null && latLng != null){// && reminder.getCurrentUser().equals(currentUser())) {
+                Utils.sendNotification((Context)this, message, latLng,reminder.getTitle(),reminder.getDescription());
             }
         }
 
+    }
+    private final String currentUser(){
+          FirebaseAuth fAuth= FirebaseAuth.getInstance();
+          String userId = fAuth.getCurrentUser().getUid();
+          return userId;
     }
 
     private final Reminder getFirstReminder(List triggeringGeofences) {

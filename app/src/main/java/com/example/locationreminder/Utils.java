@@ -82,7 +82,7 @@ public final class Utils {
 
     }
 
-    public static final void sendNotification( Context context,  String message,  LatLng latLng) {
+    public static final void sendNotification( Context context,  String message,  LatLng latLng,String title,String description) {
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (VERSION.SDK_INT >= Build.VERSION_CODES.O && notificationManager.getNotificationChannel(NOTIFICATION_CHANNEL_ID) == null) {
@@ -94,7 +94,8 @@ public final class Utils {
         Intent intent = ControlActivity.Companion.newIntent(context.getApplicationContext(), latLng);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context).addParentStack(ControlActivity.class).addNextIntent(intent);
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(getUniqueId(), PendingIntent.FLAG_UPDATE_CURRENT);
-        Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).setSmallIcon(R.mipmap.ic_launcher).setContentTitle((CharSequence)message).setContentIntent(notificationPendingIntent).setAutoCancel(true).build();
+        //Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).setSmallIcon(R.drawable.reminder_logo).setContentTitle((CharSequence)message).setContentIntent(notificationPendingIntent).setAutoCancel(true).build();
+        Notification notification = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID).setSmallIcon(R.drawable.reminder_logo).setContentTitle( title).setContentText("We are in "+message+" "+description).setAutoCancel(true).build();
         notificationManager.notify(getUniqueId(), notification);
 
     }

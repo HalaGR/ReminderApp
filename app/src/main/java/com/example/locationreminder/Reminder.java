@@ -13,12 +13,36 @@ public final class Reminder {
     private LatLng latLng;
     private Double radius;
     private String message;
+    private String currentUser;
+    private String title;
+    private String description;
+    public final String getTitle() {
+        return this.title;
+    }
+
+    public final String getDescription() {
+        return this.description;
+    }
+
+    public final void setTitle( String title) {
+        this.title = title;
+    }
+
+    public final void setDescription( String description) {
+        this.description = description;
+    }
+
+    public final String getCurrentUser() {
+        return this.currentUser;
+    }
+    public final void setCurrentUser( String currentUser) {
+        this.currentUser = currentUser;
+    }
 
 
     public final String getId() {
         return this.id;
     }
-
 
     public final LatLng getLatLng() {
         return this.latLng;

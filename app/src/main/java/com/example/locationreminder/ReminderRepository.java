@@ -20,6 +20,7 @@ import com.google.android.gms.location.Geofence.Builder;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
+import com.google.firebase.auth.FirebaseUser;
 
 public final class ReminderRepository {
     private final SharedPreferences preferences;
@@ -34,8 +36,13 @@ public final class ReminderRepository {
     private final GeofencingClient geofencingClient;
     private final Context context;
     private static final String PREFS_NAME = "ReminderRepository";
-    private static final String REMINDERS = "REMINDERS";
+    //private static final String REMINDERS = "REMINDERS";
     public static final ReminderRepository.Companion Companion = new ReminderRepository.Companion();
+
+
+    private final FirebaseAuth fAuth= FirebaseAuth.getInstance();
+    private final String userId = fAuth.getCurrentUser().getUid();
+    private final String REMINDERS = userId;
 //******************************added to translate add to add_reminder -start**********************
     private  Reminder reminder;
     public  void setReminder( Reminder reminder){
@@ -57,6 +64,7 @@ public final class ReminderRepository {
         ReminderRepository.this.saveAll(reminders_);
     }
     public final void add(final Reminder reminder, final Callable success, final Function failure) {
+        reminder.setCurrentUser(userId);
         Geofence geofence = this.buildGeofence(reminder);
         if (geofence != null && ContextCompat.checkSelfPermission(this.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.geofencingClient.addGeofences(this.buildGeofencingRequest(geofence), this.getGeofencePendingIntent()).addOnSuccessListener((OnSuccessListener)(new OnSuccessListener() {

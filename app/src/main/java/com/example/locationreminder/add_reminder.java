@@ -345,11 +345,11 @@ public class add_reminder extends BaseActivity {
                         reminder2=get(locationID);
                     }
                     }
-                       if(!from.equals("edited")&&!from.equals("edit"))
+                       if(from!=null&&!from.equals("edited")&&!from.equals("edit"))
                     {
                         addReminder();
                     }
-                     if(from.equals("edited"))
+                     if(from!=null&&from.equals("edited"))
                      {
                         removeReminder(get(locationID));
                          reminder2=getLast();
@@ -432,6 +432,8 @@ public class add_reminder extends BaseActivity {
     }
     //******************************added to translate add-remove to add_reminder -start**********************
     public final void addReminder() {
+        this.getRepository().getLast().setTitle(mytitleinput.getText().toString());
+        this.getRepository().getLast().setDescription(mydescriptioninput.getText().toString());
         this.getRepository().add(this.getRepository().getLast(),(Callable) (new Callable<Void>() {
             @Override
             public Void call() throws Exception {
@@ -477,12 +479,18 @@ public class add_reminder extends BaseActivity {
     //******************************added to translate add-remove to add_reminder -end**********************
 
     private void setAlarm() {
-        Log.d("notification", "inside setAlarm in addReminder" );
+        //Log.d("notification", "inside setAlarm in addReminder" );
 
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this,AlarmReceiver.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("title", mytitleinput.getText().toString());
+        intent.putExtra("description", mydescriptioninput.getText().toString());
         pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+
+
+
         Toast.makeText(this, "Alarm set Successfully" , Toast.LENGTH_SHORT).show();
     }
 
@@ -497,7 +505,7 @@ public class add_reminder extends BaseActivity {
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-            Log.d("notification", "inside createNotificationChannel in addReminder");
+            //Log.d("notification", "inside createNotificationChannel in addReminder");
 
         }
 
