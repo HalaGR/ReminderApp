@@ -9,7 +9,7 @@
   <string name="message_hint">We arrived! :]</string>
   <string name="radius_description">%1$s meters</string>
 
-  <string name="reminder_removal_alert">Remove reminder?</string>
+  <string name="reminder_removal_alert">Remove locationDetails?</string>
   <string name="reminder_removal_alert_positive">OK</string>
   <string name="reminder_removal_alert_negative">Cancel</string>
 

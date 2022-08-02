@@ -1,37 +1,28 @@
 package com.example.locationreminder;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.appcompat.app.ActionBar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
-import com.google.android.material.snackbar.Snackbar;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.LatLng;
-import java.util.HashMap;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
 
-public final class NewReminderActivity extends BaseActivity implements OnMapReadyCallback {
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+
+public final class LocationActivity extends SupportActivity implements OnMapReadyCallback {
     private GoogleMap map;
-    private Reminder reminder = new Reminder( (LatLng)null, (Double)null, (String)null);
+    private LocationDetails locationDetails = new LocationDetails( (LatLng)null, (Double)null, (String)null);
 
     Button myok_button;
     String mytitleinput;
@@ -41,6 +32,8 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
     String from="";
     String locationID;
     static String Key="";
+    private static final String EXTRA_LAT_LNG = "EXTRA_LAT_LNG";
+    private static final String EXTRA_ZOOM = "EXTRA_ZOOM";
     private final Object radiusBarChangeListener = new OnSeekBarChangeListener() {
         public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -50,22 +43,21 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
         }
 
         public void onProgressChanged (SeekBar seekBar, int progress, boolean fromUser) {
-            NewReminderActivity.this.updateRadiusWithProgress(progress);
-            NewReminderActivity.this.showReminderUpdate();
+            LocationActivity.this.refreshRadius(progress);
+            LocationActivity.this.updateLocation();
         }
     };
-    private static final String EXTRA_LAT_LNG = "EXTRA_LAT_LNG";
-    private static final String EXTRA_ZOOM = "EXTRA_ZOOM";
-    public static final NewReminderActivity.Companion Companion = new NewReminderActivity.Companion();
-    private final void updateRadiusWithProgress(int progress) {
-        double radius = this.getRadius(progress);
-        this.reminder.setRadius(radius);
-        ((TextView)findViewById(R.id.radiusDescription)).setText((CharSequence)this.getString(R.string.radius_description, new Object[]{String.valueOf((int) Math.round((radius)))}));
+
+    public static final LocationActivity.Companion Companion = new LocationActivity.Companion();
+    private final void refreshRadius(int progress) {
+        double radius = this.realRadius(progress);
+        this.locationDetails.setRadius(radius);
+        ((TextView)findViewById(R.id.radiusDescription)).setText((CharSequence)this.getString(R.string.radius_description1, new Object[]{String.valueOf((int) Math.round((radius)))}));
     }
 
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_new_reminder);
+        this.setContentView(R.layout.activity_location);
         SupportMapFragment mapFragment = (SupportMapFragment)this.getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback)this);
         findViewById(R.id.instructionTitle).setVisibility(View.GONE);
@@ -89,44 +81,20 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
         }
     }
 
-    public boolean onSupportNavigateUp() {
-        this.finish();
-        return true;
-    }
+
 
     public void onMapReady( GoogleMap googleMap) {
         this.map = googleMap;
         this.map.getUiSettings().setMapToolbarEnabled(false);
         this.centerCamera();
-        this.showConfigureLocationStep();
+        this.showStepOfLocation();
+    }
+    public boolean onSupportNavigateUp() {
+        this.finish();
+        return true;
     }
 
-    private final void centerCamera() {
-        LatLng latLng = (LatLng)this.getIntent().getExtras().get(EXTRA_LAT_LNG);
-        float zoom = (Float)this.getIntent().getExtras().get(EXTRA_ZOOM);
-        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-
-    }
-
-    private final void showConfigureLocationStep() {
-        findViewById(R.id.marker).setVisibility(View.VISIBLE);
-        findViewById(R.id.instructionTitle).setVisibility(View.VISIBLE);
-        findViewById(R.id.instructionSubtitle).setVisibility(View.VISIBLE);
-        findViewById(R.id.radiusBar).setVisibility( View.GONE);
-        findViewById(R.id.radiusDescription).setVisibility( View.GONE);
-        findViewById(R.id.message).setVisibility(View.GONE);
-        ((TextView)findViewById(R.id.instructionTitle)).setText((CharSequence)this.getString(R.string.instruction_where_description));
-        ((Button)this.findViewById(R.id.next)).setOnClickListener((OnClickListener)(new OnClickListener() {
-            public final void onClick(View it) {
-                NewReminderActivity.this.reminder.setLatLng(map.getCameraPosition().target);
-                NewReminderActivity.this.showConfigureRadiusStep();
-            }
-        }));
-        this.showReminderUpdate();
-    }
-
-    private final void showConfigureRadiusStep() {
+    private final void showStepOfRadius() {
         findViewById(R.id.marker).setVisibility(View.GONE);
         findViewById(R.id.instructionTitle).setVisibility(View.VISIBLE);
         findViewById(R.id.instructionSubtitle).setVisibility(View.GONE);
@@ -136,21 +104,47 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
         ((TextView)findViewById(R.id.instructionTitle)).setText((CharSequence)this.getString(R.string.instruction_radius_description));
         ((Button)this.findViewById(R.id.next)).setOnClickListener((OnClickListener)(new OnClickListener() {
             public final void onClick(View it) {
-                NewReminderActivity.this.showConfigureMessageStep();
+                LocationActivity.this.showStepOfMessage();
             }
         }));
         SeekBar radiusBar=findViewById(R.id.radiusBar);
         radiusBar.setOnSeekBarChangeListener((OnSeekBarChangeListener) radiusBarChangeListener);
-        this.updateRadiusWithProgress(((SeekBar)findViewById(R.id.radiusBar)).getProgress());
+        this.refreshRadius(((SeekBar)findViewById(R.id.radiusBar)).getProgress());
         this.map.animateCamera(CameraUpdateFactory.zoomTo(15.0F));
-        this.showReminderUpdate();
+        this.updateLocation();
     }
 
-    private final double getRadius(int progress) {
+    private final void showStepOfLocation() {
+        findViewById(R.id.marker).setVisibility(View.VISIBLE);
+        findViewById(R.id.instructionTitle).setVisibility(View.VISIBLE);
+        findViewById(R.id.instructionSubtitle).setVisibility(View.VISIBLE);
+        findViewById(R.id.radiusBar).setVisibility( View.GONE);
+        findViewById(R.id.radiusDescription).setVisibility( View.GONE);
+        findViewById(R.id.message).setVisibility(View.GONE);
+        ((TextView)findViewById(R.id.instructionTitle)).setText((CharSequence)this.getString(R.string.instruction_where_description1));
+        ((Button)this.findViewById(R.id.next)).setOnClickListener((OnClickListener)(new OnClickListener() {
+            public final void onClick(View it) {
+                LocationActivity.this.locationDetails.setLatLng(map.getCameraPosition().target);
+                LocationActivity.this.showStepOfRadius();
+            }
+        }));
+        this.updateLocation();
+    }
+    private final void centerCamera() {
+        LatLng latLng = (LatLng)this.getIntent().getExtras().get(EXTRA_LAT_LNG);
+        float zoom = (Float)this.getIntent().getExtras().get(EXTRA_ZOOM);
+        this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+
+    }
+
+
+
+    private final double realRadius(int progress) {
         return (double)100 + ((double)2 * (double)progress + (double)1) * (double)100;
     }
 
-    private final void showConfigureMessageStep() {
+    private final void showStepOfMessage() {
 
         findViewById(R.id.marker).setVisibility(View.GONE);
         findViewById(R.id.instructionTitle).setVisibility(View.VISIBLE);
@@ -158,22 +152,22 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
         findViewById(R.id.radiusBar).setVisibility(View.GONE);
         findViewById(R.id.radiusDescription).setVisibility(View.GONE);
         findViewById(R.id.message).setVisibility(View.VISIBLE);
-        ((TextView)findViewById(R.id.instructionTitle)).setText((CharSequence)this.getString(R.string.instruction_where_description));
+        ((TextView)findViewById(R.id.instructionTitle)).setText((CharSequence)this.getString(R.string.instruction_where_description1));
         ((Button)this.findViewById(R.id.next)).setOnClickListener((OnClickListener)(new OnClickListener() {
             public final void onClick(View it) {
-                Utils.hideKeyboard((Context)NewReminderActivity.this,(EditText)NewReminderActivity.this.findViewById(R.id.message));
-                NewReminderActivity.this.reminder.setMessage(((TextView)findViewById(R.id.message)).getText().toString());
-                if ((CharSequence)NewReminderActivity.this.reminder.getMessage() == null || NewReminderActivity.this.reminder.getMessage().length() == 0) {
-                    ((TextView)findViewById(R.id.message)).setError((CharSequence)NewReminderActivity.this.getString(R.string.error_required));
+                Services.coverConsole((Context) LocationActivity.this,(EditText) LocationActivity.this.findViewById(R.id.message));
+                LocationActivity.this.locationDetails.setMessage(((TextView)findViewById(R.id.message)).getText().toString());
+                if ((CharSequence) LocationActivity.this.locationDetails.getMessage() == null || LocationActivity.this.locationDetails.getMessage().length() == 0) {
+                    ((TextView)findViewById(R.id.message)).setError((CharSequence) LocationActivity.this.getString(R.string.error_required));
                 } else {
                     //******************************added to translate add to add_reminder -start**********************
 
-                    addReminder2();
+                    saveLocation();
 //******************************added to translate add to add_reminder -end************************
-                    //NewReminderActivity.this.addReminder(NewReminderActivity.this.reminder);
+                    //LocationActivity.this.addReminder(LocationActivity.this.locationDetails);
 
 
-                    Intent n= new Intent(NewReminderActivity.this, add_reminder.class);
+                    Intent n= new Intent(LocationActivity.this, add_reminder.class);
                     n.putExtra("mytitleinput",mytitleinput);
                     n.putExtra("mydescriptioninput",mydescriptioninput);
                     n.putExtra("mydate",mydate);
@@ -189,36 +183,36 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
 
             }
         }));
-        Utils.requestFocusWithKeyboard((EditText)this.findViewById(R.id.message));
-        this.showReminderUpdate();
+        Services.FocusingWithConsole((EditText)this.findViewById(R.id.message));
+        this.updateLocation();
     }
     //******************************added to translate add to add_reminder -start**********************
-    public final void addReminder2() {
-        this.getRepository().saveReminder(NewReminderActivity.this.reminder);
- //this.getRepository().setReminder(NewReminderActivity.this.reminder);
+    public final void saveLocation() {
+        this.getStoreHouse().saveLocation(LocationActivity.this.locationDetails);
+ //this.getStoreHouse().setReminder(LocationActivity.this.locationDetails);
     }
 
-    //******************************added to translate add to add_reminder -end************************
-    public final void addReminder(Reminder reminder) {
-        this.getRepository().add(reminder,(Callable) (new Callable<Void>() {
+ /*   //******************************added to translate add to add_reminder -end************************
+    public final void addReminder(LocationDetails locationDetails) {
+        this.getStoreHouse().add(locationDetails,(Callable) (new Callable<Void>() {
             @Override
             public Void call() throws Exception {
-                NewReminderActivity.this.setResult(Activity.RESULT_OK);
-                NewReminderActivity.this.finish();
+                LocationActivity.this.setResult(Activity.RESULT_OK);
+                LocationActivity.this.finish();
                 return null;
             }
         }),(Function) (new Function<String,Void>() {
             @Override
             public Void apply(String it) {
-                Snackbar.make((CoordinatorLayout)NewReminderActivity.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
+                Snackbar.make((CoordinatorLayout) LocationActivity.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
                 return null;
             }
         }));
-    }
+    }*/
 
-    private final void showReminderUpdate() {
+    private final void updateLocation() {
         this.map.clear();
-        Utils.showReminderInMap((Context)this, this.map, this.reminder);
+        Services.viewLocation((Context)this, this.map, this.locationDetails);
     }
 
 
@@ -226,7 +220,7 @@ public final class NewReminderActivity extends BaseActivity implements OnMapRead
     public static final class Companion {
 
         public final Intent newIntent( Context context,  LatLng latLng, float zoom) {
-            Intent intent = new Intent(context, NewReminderActivity.class);
+            Intent intent = new Intent(context, LocationActivity.class);
             intent.putExtra(EXTRA_LAT_LNG, (Parcelable)latLng).putExtra(EXTRA_ZOOM, zoom);
             return intent;
         }

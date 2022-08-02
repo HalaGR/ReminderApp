@@ -6,7 +6,7 @@
   android:id="@+id/main"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".NewReminderActivity">
+  tools:context=".LocationActivity">
 
   <fragment
     android:id="@+id/map"
@@ -21,36 +21,38 @@
     android:layout_gravity="center"
     android:layout_marginBottom="24dp"
     android:contentDescription="@string/marker_content_description"
-    app:srcCompat="@drawable/ic_twotone_location_on_48px" />
+    app:srcCompat="@drawable/ic_baseline_location_on_24" />
 
   <LinearLayout
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="#ffffff"
-    android:orientation="vertical">
+    android:background="@drawable/vie_bg"
+    android:orientation="vertical"
+      android:outlineAmbientShadowColor="@color/black"
+      android:outlineSpotShadowColor="@color/black">
 
     <TextView
       android:id="@+id/instructionTitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="16dp"
+      android:layout_marginLeft="120dp"
       android:layout_marginTop="16dp"
       android:layout_marginRight="16dp"
       android:layout_marginBottom="8dp"
       android:textColor="#000"
       android:textSize="18sp"
-      tools:text="@string/instruction_where_description" />
+      tools:text="@string/instruction_where_description1" />
 
     <TextView
       android:id="@+id/instructionSubtitle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="16dp"
+      android:layout_marginLeft="50dp"
       android:layout_marginRight="16dp"
       android:layout_marginBottom="8dp"
-      android:text="@string/instruction_where_subtitle_description" />
+      android:text="@string/instruction_where_subtitle_description1" />
 
     <SeekBar
       android:id="@+id/radiusBar"
@@ -60,7 +62,10 @@
       android:layout_marginLeft="2dp"
       android:layout_marginRight="2dp"
       android:max="4"
-      android:progress="2" />
+      android:progress="2"
+        android:valueFrom="200"
+        android:valueTo="1000"
+        android:stepSize="200"/>
 
     <TextView
       android:id="@+id/radiusDescription"
@@ -72,7 +77,7 @@
       android:layout_marginRight="16dp"
       android:layout_marginBottom="4dp"
         android:text=""
-      tools:text="100 meters" />
+      tools:text="100 m" />
 
     <EditText
       android:id="@+id/message"
@@ -81,7 +86,7 @@
       android:layout_marginLeft="13dp"
       android:layout_marginRight="13dp"
       android:layout_marginBottom="8dp"
-      android:hint="@string/message_hint"
+      android:hint="@string/message_hint1"
       android:imeOptions="actionDone"
       android:inputType="textCapSentences"
       android:maxLines="1" />
@@ -95,9 +100,9 @@
       android:layout_marginTop="8dp"
       android:layout_marginRight="16dp"
       android:layout_marginBottom="8dp"
-      android:background="@drawable/bg_button"
+      android:background="@drawable/button_bg"
       android:foreground="?attr/selectableItemBackground"
-      android:text="@string/continue_description"
+      android:text="@string/next_description"
       android:textColor="@color/colorAccent" />
 
   </LinearLayout>

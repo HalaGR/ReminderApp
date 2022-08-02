@@ -4,26 +4,19 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.os.Build;
-import android.os.Bundle;
-import android.provider.AlarmClock;
 import android.util.Log;
 
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -32,19 +25,12 @@ import android.widget.TimePicker;
 import android.widget.EditText;
 
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 //import android.widget.Toolbar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.NotificationCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.viewpager.widget.ViewPager;
-import com.google.android.gms.common.internal.ICancelToken;
 //import com.example.locationreminder.databinding.ActivityMainBinding;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -52,19 +38,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentStatePagerAdapter;
 
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -75,7 +54,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 
-public class add_reminder extends BaseActivity {
+public class add_reminder extends SupportActivity {
 
 
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
@@ -313,7 +292,7 @@ public class add_reminder extends BaseActivity {
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //get current user database
+        //search current user database
         firebaseAuth = FirebaseAuth.getInstance();
         firebasefirestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -326,7 +305,7 @@ public class add_reminder extends BaseActivity {
                 String description = mydescriptioninput.getText().toString();
                 String date = mydate.getText().toString();
                 String time = mytime.getText().toString();
-                //new  NewReminderActivity().addReminder(new Reminder(id,latLng,radius,message));
+                //new  LocationActivity().addReminder(new LocationDetails(id,latLng,radius,message));
 
 
                 // add reminder to database
@@ -336,13 +315,13 @@ public class add_reminder extends BaseActivity {
                 List<Object> reminderLocation_list=new ArrayList<Object>();
                 if (remindmethere_switch.isChecked())
                 {
-                    Reminder reminder2=getLast();
+                    LocationDetails locationDetails2 =getLast();
                 // List<Object> reminderLocation_list=new ArrayList<Object>();
                     if(locationID!=null)
                     {
                         if(!locationID.equals(""))
                     {
-                        reminder2=get(locationID);
+                        locationDetails2 =get(locationID);
                     }
                     }
                        if(from!=null&&!from.equals("edited")&&!from.equals("edit"))
@@ -352,20 +331,20 @@ public class add_reminder extends BaseActivity {
                      if(from!=null&&from.equals("edited"))
                      {
                         removeReminder(get(locationID));
-                         reminder2=getLast();
+                         locationDetails2 =getLast();
                          addReminder();
                      }
-                reminderLocation_list.add(reminder2.getId());
-                reminderLocation_list.add(reminder2.getLatLng());
-                reminderLocation_list.add(reminder2.getRadius());
-                reminderLocation_list.add(reminder2.getMessage());
+                reminderLocation_list.add(locationDetails2.getId());
+                reminderLocation_list.add(locationDetails2.getLatLng());
+                reminderLocation_list.add(locationDetails2.getRadius());
+                reminderLocation_list.add(locationDetails2.getMessage());
 
                 reminder.put("reminder",reminderLocation_list);
                 }
                 else{
                     reminder.put("reminder",reminderLocation_list);
                 }
-                //reminder.put("reminder",getLast());
+                //reminder.put("reminder",getFinal());
                 if (mydate_switch.isChecked()) { // if Date is chosen
                     if (date.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Please Choose a Date", Toast.LENGTH_SHORT).show();
@@ -394,7 +373,7 @@ public class add_reminder extends BaseActivity {
                             public void onSuccess(Void unused) {
                                 //reminder saved successfully
                                 // send feedback and go back to home page
-                                Toast.makeText(getApplicationContext(), "Reminder saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "LocationDetails saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(add_reminder.this, home_page_Activity.class));
                                 //set alarM
                                 setAlarm();
@@ -432,9 +411,9 @@ public class add_reminder extends BaseActivity {
     }
     //******************************added to translate add-remove to add_reminder -start**********************
     public final void addReminder() {
-        this.getRepository().getLast().setTitle(mytitleinput.getText().toString());
-        this.getRepository().getLast().setDescription(mydescriptioninput.getText().toString());
-        this.getRepository().add(this.getRepository().getLast(),(Callable) (new Callable<Void>() {
+        this.getStoreHouse().getFinal().setTitle(mytitleinput.getText().toString());
+        this.getStoreHouse().getFinal().setDescription(mydescriptioninput.getText().toString());
+        this.getStoreHouse().add(this.getStoreHouse().getFinal(),(Callable) (new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 add_reminder.this.setResult(Activity.RESULT_OK);
@@ -449,17 +428,17 @@ public class add_reminder extends BaseActivity {
             }
         }));
     }
-    public final Reminder getLast() {
-    return this.getRepository().getLast();}
+    public final LocationDetails getLast() {
+    return this.getStoreHouse().getFinal();}
 
 
-    private final Reminder get(String id){
-        return this.getRepository().get(id);
+    private final LocationDetails get(String id){
+        return this.getStoreHouse().search(id);
     }
 
 
-    private final void removeReminder(Reminder reminder) {
-        this.getRepository().remove(reminder,(Callable) (new Callable<Void>() {
+    private final void removeReminder(LocationDetails locationDetails) {
+        this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();

@@ -2,15 +2,19 @@
     <string name="app_name">locationReminder</string>
     <string name="select">locationReminder</string>
     <string name="instruction_where_description">Where do you want to be reminded?</string>
+    <string name="instruction_where_description1">set a location</string>
     <string name="instruction_where_subtitle_description">Drag the map to set the location</string>
+    <string name="instruction_where_subtitle_description1">Choose your place by dragging the map</string>
     <string name="instruction_radius_description">Choose the radius</string>
     <string name="instruction_message_description">Enter the message</string>
     <string name="continue_description">Continue</string>
+    <string name="next_description">Next</string>
     <string name="error_required">Required</string>
     <string name="message_hint">We arrived! :]</string>
+    <string name="message_hint1">Your destination</string>
     <string name="radius_description">%1$s meters</string>
-
-    <string name="reminder_removal_alert">Remove reminder?</string>
+    <string name="radius_description1">%1$s m</string>
+    <string name="reminder_removal_alert">Remove locationDetails?</string>
     <string name="reminder_removal_alert_positive">OK</string>
     <string name="reminder_removal_alert_negative">Cancel</string>
 

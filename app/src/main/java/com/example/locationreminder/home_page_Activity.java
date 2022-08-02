@@ -1,15 +1,10 @@
 package com.example.locationreminder;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,40 +13,30 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.graphics.Color;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import android.view.ContextMenu;
-
-import android.view.MenuItem;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 
-public class home_page_Activity extends BaseActivity {
+public class home_page_Activity extends SupportActivity {
 
 
     TextView my_add_reminder_btn;
@@ -158,7 +143,7 @@ public class home_page_Activity extends BaseActivity {
         fStore = FirebaseFirestore.getInstance();
         myfirstnote=findViewById(R.id.firstnote);
         Query query = fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").orderBy("title", Query.Direction.ASCENDING);
-        //if (fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").get().getResult().getDocuments().isEmpty()) myfirstnote.setVisibility(View.VISIBLE);
+        //if (fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").search().getResult().getDocuments().isEmpty()) myfirstnote.setVisibility(View.VISIBLE);
         FirestoreRecyclerOptions<firebasemodel> all_user_reminders = new FirestoreRecyclerOptions.Builder<firebasemodel>().setQuery(query, firebasemodel.class).build();
        // if( all_user_reminders.getSnapshots().isEmpty())myfirstnote.setVisibility(View.VISIBLE);
         reminderAdapter = new FirestoreRecyclerAdapter<firebasemodel, ReminderViweHolder>(all_user_reminders) {
@@ -263,7 +248,7 @@ public class home_page_Activity extends BaseActivity {
                                               if (reminder.size()!=0)
                                               {removeReminder(get((String)reminder.get(0)));}
                                           }
-                                          Toast.makeText(view.getContext(), "Reminder successfully deleted!", Toast.LENGTH_SHORT).show();
+                                          Toast.makeText(view.getContext(), "LocationDetails successfully deleted!", Toast.LENGTH_SHORT).show();
                                       }
                                   }).addOnFailureListener(new OnFailureListener() {
                                       @Override
@@ -276,7 +261,7 @@ public class home_page_Activity extends BaseActivity {
                                   Intent n= new Intent(home_page_Activity.this, add_reminder.class);
                                   //n.putExtra("from","home");
                                   n.putExtra("Key",Key);
-                                  //n.putExtra("mytime",fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).get().getResult().get("time").toString());
+                                  //n.putExtra("mytime",fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).search().getResult().search("time").toString());
                                   n.putExtra("mytime",mytime);
                                   n.putExtra("mytitleinput",reminderTitle.getText());
                                   mylocation.setLatitude(mylocation_list.get(0));
@@ -334,13 +319,13 @@ public class home_page_Activity extends BaseActivity {
     private void showErrorToast() {
         Toast.makeText(this,"There was an error. Please try again.", Toast.LENGTH_SHORT).show();
     }
-    private final Reminder get(String id){
-        return this.getRepository().get(id);
+    private final LocationDetails get(String id){
+        return this.getStoreHouse().search(id);
     }
 
 
-    private final void removeReminder(Reminder reminder) {
-        this.getRepository().remove(reminder,(Callable) (new Callable<Void>() {
+    private final void removeReminder(LocationDetails locationDetails) {
+        this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {
             @Override
             public Void call() throws Exception {
                 Snackbar.make((CoordinatorLayout) home_page_Activity.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();

@@ -78,7 +78,7 @@
 
             />
 
-        <activity android:name=".NewReminderActivity"
+        <activity android:name=".LocationActivity"
             android:exported="true"/>
         <activity
             android:name=".ControlActivity"
@@ -90,11 +90,11 @@
         </activity>
 
         <receiver
-            android:name=".GeofenceBroadcastReceiver"
+            android:name=".LocationReceiver"
             android:enabled="true"
             android:exported="true" />
         <service
-            android:name=".GeofenceTransitionsJobIntentService"
+            android:name=".PreparingForLocationNotification"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <uses-library android:name="org.apache.http.legacy" android:required="false" />

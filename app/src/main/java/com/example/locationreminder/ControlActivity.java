@@ -1,14 +1,5 @@
 package com.example.locationreminder;
 
-
-
-
-// MainActivity$showReminderRemoveAlert$1$2.java
-
-import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-//import android.content.DialogInterface.OnClickListener;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,38 +9,24 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Parcelable;
-
+import android.Manifest;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-//import android.content.DialogInterface;
-//import android.content.DialogInterface.OnClickListener;
-//import android.support.v4.app.Fragment;
-//import android.support.v4.content.ContextCompat;
-//import android.support.v7.app.AlertDialog;
-//import android.support.v7.app.AlertDialog.Builder;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-//import com.android.raywenderlich.remindmethere.R.id;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.function.Function;
 
-// MainActivity.java
-
-
-public final class ControlActivity extends BaseActivity implements OnMapReadyCallback{//, OnMarkerClickListener {
+public final class ControlActivity extends SupportActivity implements OnMapReadyCallback{
 
     //********************************
     Button myok_button;
@@ -63,8 +40,6 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
     //********************************
     private GoogleMap map;
     private LocationManager locationManager;
-    private static final int MY_LOCATION_REQUEST_CODE = 329;
-    private static final int NEW_REMINDER_REQUEST_CODE = 330;
     private static final String EXTRA_LAT_LNG = "EXTRA_LAT_LNG";
     //public static final MainActivity.Companion Companion = new MainActivity.Companion((DefaultConstructorMarker)null);
     //private Object CameraUpdateFactory;
@@ -79,7 +54,7 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
         ((FloatingActionButton) findViewById(R.id.newReminder)).setOnClickListener((OnClickListener) (new OnClickListener() {
             @Override
             public void onClick(View it) {
-                Intent intent = NewReminderActivity.Companion.newIntent((Context) ControlActivity.this, ControlActivity.this.map.getCameraPosition().target, ControlActivity.this.map.getCameraPosition().zoom);
+                Intent intent = LocationActivity.Companion.newIntent((Context) ControlActivity.this, ControlActivity.this.map.getCameraPosition().target, ControlActivity.this.map.getCameraPosition().zoom);
                 intent.putExtra("mytitleinput",mytitleinput);
                 intent.putExtra("mydescriptioninput",mydescriptioninput);
                 intent.putExtra("mydate",mydate);
@@ -133,23 +108,29 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == NEW_REMINDER_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            this.showReminders();
-            Reminder reminder = this.getRepository().getLast();
-            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(reminder != null ? reminder.getLatLng() : null, 15.0F));
+        if (requestCode == 330 && resultCode == Activity.RESULT_OK) {
+            this.viewLocations();
+            LocationDetails locationDetails = this.getStoreHouse().getFinal();
+            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(locationDetails != null ? locationDetails.getLatLng() : null, 15.0F));
             Snackbar.make((CoordinatorLayout) this.findViewById(R.id.main), R.string.reminder_added_success, Snackbar.LENGTH_LONG).show();
         }
 
     }
 
+
+    private final void centerCamera() {
+        if (this.getIntent().getExtras() != null && this.getIntent().getExtras().containsKey(EXTRA_LAT_LNG)) {
+            LatLng latLng = (LatLng) (this.getIntent().getExtras() != null ? this.getIntent().getExtras().get(EXTRA_LAT_LNG) : null);
+            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0F));
+        }
+    }
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_LOCATION_REQUEST_CODE) {
+        if (requestCode == 329) {
             this.onMapAndPermissionReady();
         }
 
     }
-
     private final void onMapAndPermissionReady() {
 
         if (this.map != null && ContextCompat.checkSelfPermission((Context) this, "android.permission.ACCESS_FINE_LOCATION") == 0) {
@@ -182,26 +163,21 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
 
 
             }));
-            this.showReminders();
+            this.viewLocations();
             this.centerCamera();
 
 
         }
     }
 
-    private final void centerCamera() {
-        if (this.getIntent().getExtras() != null && this.getIntent().getExtras().containsKey(EXTRA_LAT_LNG)) {
-            LatLng latLng = (LatLng) (this.getIntent().getExtras() != null ? this.getIntent().getExtras().get(EXTRA_LAT_LNG) : null);
-            this.map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15.0F));
-        }
-    }
 
-    private final void showReminders() {
+
+    private final void viewLocations() {
         this.map.clear();
-        List<Reminder> reminders_=this.getRepository().getAll();
-        for (Reminder reminder : reminders_) {
-            // Reminder reminder = (Reminder) reminders_.iterator().next();
-            Utils.showReminderInMap((Context) this, this.map, reminder);
+        List<LocationDetails> reminders_=this.getStoreHouse().getEachOfLocations();
+        for (LocationDetails locationDetails : reminders_) {
+            // LocationDetails locationDetails = (LocationDetails) reminders_.iterator().next();
+            Services.viewLocation((Context) this, this.map, locationDetails);
         }
     }
 
@@ -214,19 +190,19 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
     }
 
    /* public boolean onMarkerClick(Marker marker) {
-        Reminder reminder = this.getRepository().get((String) marker.getTag());
+        LocationDetails reminder = this.getStoreHouse().search((String) marker.getTag());
         if (reminder != null) {
             this.showReminderRemoveAlert(reminder);
         }
         return true;
     }*/
 
-    private final void showReminderRemoveAlert(Reminder reminder) {
+    /*private final void showReminderRemoveAlert(LocationDetails locationDetails) {
         AlertDialog alertDialog = (new AlertDialog.Builder((Context) this)).create();
         alertDialog.setMessage((CharSequence) this.getString(R.string.reminder_removal_alert));
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, (CharSequence) this.getString(R.string.reminder_removal_alert_positive),new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                ControlActivity.this.removeReminder(reminder);
+                ControlActivity.this.removeReminder(locationDetails);
                 dialog.dismiss();
             }
         });
@@ -237,13 +213,14 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
         });
 
         alertDialog.show();
-    }
+    }*/
 
-    private final void removeReminder(Reminder reminder) {
-        this.getRepository().remove(reminder,(Callable) (new Callable<Void>() {
+
+    /*private final void removeReminder(LocationDetails locationDetails) {
+        this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {
             @Override
             public Void call() throws Exception {
-                ControlActivity.this.showReminders();
+                ControlActivity.this.viewLocations();
                 Snackbar.make((CoordinatorLayout) ControlActivity.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();
                 return null;
             }
@@ -257,7 +234,7 @@ public final class ControlActivity extends BaseActivity implements OnMapReadyCal
 
         }));
 
-    }
+    }*/
 
     public static final class Companion {
 

@@ -8,7 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.UUID;
 
 
-public final class Reminder {
+public final class LocationDetails {
     private final String id;
     private LatLng latLng;
     private Double radius;
@@ -71,14 +71,14 @@ public final class Reminder {
     }
 
 
-    public Reminder( LatLng latLng,  Double radius, String message) {
+    public LocationDetails(LatLng latLng, Double radius, String message) {
         super();
         this.id = UUID.randomUUID().toString();
         this.latLng = latLng;
         this.radius = radius;
         this.message = message;
     }
-    public Reminder( String id, LatLng latLng,  Double radius, String message) {
+    public LocationDetails(String id, LatLng latLng, Double radius, String message) {
         super();
         this.id =id;
         this.latLng = latLng;

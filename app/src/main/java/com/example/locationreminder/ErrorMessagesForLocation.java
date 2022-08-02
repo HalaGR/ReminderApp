@@ -5,20 +5,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import com.google.android.gms.common.api.ApiException;
 
-public final class GeofenceErrorMessages {
-    public static final GeofenceErrorMessages INSTANCE;
-    public final String getErrorString( Context context, Exception e) {
-        if (e instanceof ApiException) {
-            return this.getErrorString(context, ((ApiException)e).getStatusCode());
-        } else {
-            return "Unknown error: the Geofence service is not available now.";
-
-        }
-
-    }
+public final class ErrorMessagesForLocation {
+    public static final ErrorMessagesForLocation INSTANCE;
 
 
-    public final String getErrorString( Context context, int errorCode) {
+
+    public final String errorService(Context context, int errorCode) {
         Resources resources = context.getResources();
         switch(errorCode) {
             case 1000:
@@ -34,12 +26,21 @@ public final class GeofenceErrorMessages {
 
 
     }
+    public final String errorService(Context context, Exception e) {
+        if (e instanceof ApiException) {
+            return this.errorService(context, ((ApiException)e).getStatusCode());
+        } else {
+            return "Unknown error: the Location service is not available now.";
 
-    private GeofenceErrorMessages() {
+        }
+
+    }
+
+    private ErrorMessagesForLocation() {
     }
 
     static {
-        INSTANCE = new GeofenceErrorMessages();
+        INSTANCE = new ErrorMessagesForLocation();
     }
 }
 
