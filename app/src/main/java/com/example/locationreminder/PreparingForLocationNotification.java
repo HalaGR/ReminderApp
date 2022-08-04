@@ -18,6 +18,10 @@ import java.util.List;
 
 
 public final class PreparingForLocationNotification extends JobIntentService {
+    /*
+    * in this class we prepare for showing a location notification for user
+    * we see if we in a correct place if yes then we use a notification function from Services class
+    * */
     public static final PreparingForLocationNotification.Companion Companion = new PreparingForLocationNotification.Companion();
 
     protected void onHandleWork( Intent intent) {

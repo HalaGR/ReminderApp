@@ -7,6 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class LoginAdapter extends FragmentStatePagerAdapter {
+
+    /*using this class we can move between login and signup pages*/
+
     private Context context;
     int totalTabs;
 

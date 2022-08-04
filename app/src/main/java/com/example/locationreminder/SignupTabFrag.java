@@ -34,6 +34,13 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class SignupTabFrag extends Fragment {
+
+    /*
+    in this fragment class user can signup ,for doing that he should add email
+    ,mobile number, password and confirm password .
+    all data will saved into firebase.
+  this class is related to signup_tab_fragment.xml
+  */
     TextView email;
     TextView mobilenum;
     TextView pass;

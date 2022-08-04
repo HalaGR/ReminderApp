@@ -29,6 +29,10 @@ import java.util.concurrent.Callable;
 import java.util.function.Function;
 
 public final class LocationStoreHouse {
+    /*
+     In this class  we save all location reminders for every user in SharedPreferences for restore it
+      also we did add,remove,search,get last, get all functions for locations
+    * */
     private final SharedPreferences preferences;
     private final GeofencingClient geofencingClient;
     private final Gson gson;

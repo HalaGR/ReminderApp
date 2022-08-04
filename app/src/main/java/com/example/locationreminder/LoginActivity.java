@@ -10,6 +10,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 public class LoginActivity extends AppCompatActivity {
+    /*
+    * this activity class made to be frame for log in activity
+    * this class related to activity_login.xml  */
     TabLayout tabLayout;
     ViewPager viewPager;
     float v=0;

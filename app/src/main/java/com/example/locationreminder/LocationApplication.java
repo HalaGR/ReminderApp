@@ -4,6 +4,10 @@ package com.example.locationreminder;
 import android.app.Application;
 
 public final class LocationApplication extends Application {
+    /*
+       this Application class made to use a single LocationStoreHouse object
+       from a different classes.
+    */
     private LocationStoreHouse storeHouse;
     Application application;
     public LocationApplication(Application application){

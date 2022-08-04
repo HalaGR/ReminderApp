@@ -21,6 +21,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 public final class LocationActivity extends SupportActivity implements OnMapReadyCallback {
+    /*
+     in this activity class user can set a location and choose radius that mean
+     it’s a circular area at a specific location that an app can use to trigger particular behaviors when a device enters,
+      exits or stays for a certain amount of time within location boundaries.
+      and in the end user can write name of this destination.
+
+    */
     private GoogleMap map;
     private LocationDetails locationDetails = new LocationDetails( (LatLng)null, (Double)null, (String)null);
 

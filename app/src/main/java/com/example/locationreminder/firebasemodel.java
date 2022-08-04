@@ -5,6 +5,9 @@ import java.util.List;
 import android.location.Location;
 
 public class firebasemodel {
+    /* in this class we save all the information that we bring from firebase in it
+    that include the data that user saved before for remind him
+    */
     private String title;
     private String description;
     private String date;

@@ -27,6 +27,11 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.List;
 
 public final class ControlActivity extends SupportActivity implements OnMapReadyCallback{
+/*  in this activity class user can choose the location that he wanna be reminded in using map
+    also he can choose her current place ,after choosing he can click on add button to continue .
+    this activity is related to activity_control.xml
+   */
+
 
     //********************************
     Button myok_button;

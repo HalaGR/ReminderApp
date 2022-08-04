@@ -9,6 +9,8 @@ import java.util.UUID;
 
 
 public final class LocationDetails {
+    /* in this class we save all data about location reminder in it to reuse this information for
+     saving location and showing notification for user*/
     private final String id;
     private LatLng latLng;
     private Double radius;

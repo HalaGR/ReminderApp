@@ -6,10 +6,10 @@ import android.content.res.Resources;
 import com.google.android.gms.common.api.ApiException;
 
 public final class ErrorMessagesForLocation {
+    /* we use this class to show appropriate messages when errors happened while we deal with location reminder
+     */
+
     public static final ErrorMessagesForLocation INSTANCE;
-
-
-
     public final String errorService(Context context, int errorCode) {
         Resources resources = context.getResources();
         switch(errorCode) {

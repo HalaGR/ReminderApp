@@ -37,7 +37,13 @@ import java.util.function.Function;
 
 
 public class home_page_Activity extends SupportActivity {
+/* in this activity class we bring the data that user saved before (collection of reminders) from firebase and view it
+in list ,also he can click on add reminder button to add new one, and in case the user didn't Verified her email before
+then a small note will appear to click on it to do verification.
+user can do sign out.
+this class is related to activity_home_page.xml
 
+ */
 
     TextView my_add_reminder_btn;
     Button my_sign_out_but;

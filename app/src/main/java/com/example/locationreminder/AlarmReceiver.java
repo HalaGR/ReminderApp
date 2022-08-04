@@ -13,6 +13,9 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class    AlarmReceiver extends BroadcastReceiver {
+    /* in this class the notification of time and date will appear for user When the right time,date happens
+    (the title and description will show as notification )
+     */
 
     public AlarmReceiver(){
 

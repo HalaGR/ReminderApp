@@ -26,6 +26,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginTabFragment extends Fragment {
+    /*in this fragment class user can add email,password to login also he can change password
+    if he forget it using her email.
+    we can compare data that user write with data that saved in firebase .
+    this class is related to login_tab_fragment.xml*/
        TextView email;
        TextView pass;
        TextView forgetpass;

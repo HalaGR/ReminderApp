@@ -35,11 +35,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 public final class Services {
+
+    /* in this class we can find functions that will help for saving location
+      like view location, send notification,
+     calculate numbers etc*/
     private static final String CHANNEL_NOTIFICATION = "android.support.v4.channel";
-
-
-
-
 
     private static final int specialNum() {
         return (int)(System.currentTimeMillis() % (long)10000);

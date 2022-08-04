@@ -56,7 +56,12 @@ import java.util.function.Function;
 
 public class add_reminder extends SupportActivity {
 
-
+/* In this activity class user can choose the way that he wanna to reminded using it
+  , there are three ways by time,location and date , he also can write a title and description
+  we save all the information in firebase to reuse it for showing a notification and showing
+   all the reminders in home page .
+   this activity is related to activity_add_reminder.xml
+ */
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
     SwitchCompat mydate_switch,mytime_switch,remindmethere_switch;
     SwitchCompat myTime_switch;
