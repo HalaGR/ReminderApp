@@ -382,6 +382,11 @@ public class add_reminder extends SupportActivity {
                                 startActivity(new Intent(add_reminder.this, home_page_Activity.class));
                                 //set alarM
                                 setAlarm();
+                                //clear input
+                                mytitleinput.getText().clear();
+                                mydescriptioninput.getText().clear();
+                                mydate.getText().clear();
+                                mytime.getText().clear();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -396,9 +401,15 @@ public class add_reminder extends SupportActivity {
                                 //update saved successfully
                                 // send feedback and go back to home page
                                 Toast.makeText(getApplicationContext(), "Update saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
+
                                 startActivity(new Intent(add_reminder.this, home_page_Activity.class));
                                 //set alarM
                                 setAlarm();
+                                //clear input
+                                mytitleinput.getText().clear();
+                                mydescriptioninput.getText().clear();
+                                mydate.getText().clear();
+                                mytime.getText().clear();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -418,20 +429,22 @@ public class add_reminder extends SupportActivity {
     public final void addReminder() {
         this.getStoreHouse().getFinal().setTitle(mytitleinput.getText().toString());
         this.getStoreHouse().getFinal().setDescription(mydescriptioninput.getText().toString());
-        this.getStoreHouse().add(this.getStoreHouse().getFinal(),(Callable) (new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                add_reminder.this.setResult(Activity.RESULT_OK);
-                add_reminder.this.finish();
-                return null;
-            }
-        }),(Function) (new Function<String,Void>() {
-            @Override
-            public Void apply(String it) {
-                Snackbar.make((CoordinatorLayout)add_reminder.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
-                return null;
-            }
-        }));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            this.getStoreHouse().add(this.getStoreHouse().getFinal(),(Callable) (new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    add_reminder.this.setResult(Activity.RESULT_OK);
+                    add_reminder.this.finish();
+                    return null;
+                }
+            }),(Function) (new Function<String,Void>() {
+                @Override
+                public Void apply(String it) {
+                    Snackbar.make((CoordinatorLayout)add_reminder.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
+                    return null;
+                }
+            }));
+        }
     }
     public final LocationDetails getLast() {
     return this.getStoreHouse().getFinal();}
@@ -443,21 +456,23 @@ public class add_reminder extends SupportActivity {
 
 
     private final void removeReminder(LocationDetails locationDetails) {
-        this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();
-                return null;
-            }
-        }),  (Function) (new Function<String,Void>() {
-            @Override
-            public Void apply(String it) {
-                Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
-                return null;
-            }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {
+                @Override
+                public Void call() throws Exception {
+                    Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();
+                    return null;
+                }
+            }),  (Function) (new Function<String,Void>() {
+                @Override
+                public Void apply(String it) {
+                    Snackbar.make((CoordinatorLayout) add_reminder.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
+                    return null;
+                }
 
 
-        }));
+            }));
+        }
 
     }
     //******************************added to translate add-remove to add_reminder -end**********************
@@ -471,7 +486,7 @@ public class add_reminder extends SupportActivity {
         intent.putExtra("title", mytitleinput.getText().toString());
         intent.putExtra("description", mydescriptioninput.getText().toString());
         pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
 
 
 

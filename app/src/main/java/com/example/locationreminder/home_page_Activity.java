@@ -251,8 +251,9 @@ this class is related to activity_home_page.xml
                                       @Override
                                       public void onSuccess(@NonNull Void unused) {
                                           if (reminder!=null){
-                                              if (reminder.size()!=0)
-                                              {removeReminder(get((String)reminder.get(0)));}
+                                              if (reminder.size()!=0) {
+                                                  removeReminder(get((String)reminder.get(0)));
+                                              }
                                           }
                                           Toast.makeText(view.getContext(), "LocationDetails successfully deleted!", Toast.LENGTH_SHORT).show();
                                       }
