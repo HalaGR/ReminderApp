@@ -35,7 +35,6 @@ public class    AlarmReceiver extends BroadcastReceiver {
             intent.removeExtra("title");
             intent.removeExtra("description");
 
-
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,0);
