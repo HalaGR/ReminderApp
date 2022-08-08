@@ -224,7 +224,7 @@ this class is related to activity_home_page.xml
         private String mydate="";
         private String Key;
         private Location mylocation=new Location("");
-        private List<Double> mylocation_list= new ArrayList<Double>();
+        //private List<Double> mylocation_list= new ArrayList<Double>();
         LinearLayout myreminders;
 
 
@@ -270,8 +270,8 @@ this class is related to activity_home_page.xml
                                   //n.putExtra("mytime",fStore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document(Key).search().getResult().search("time").toString());
                                   n.putExtra("mytime",mytime);
                                   n.putExtra("mytitleinput",reminderTitle.getText());
-                                  mylocation.setLatitude(mylocation_list.get(0));
-                                  mylocation.setLongitude(mylocation_list.get(1));
+                                 // mylocation.setLatitude(mylocation_list.get(0));
+                                 // mylocation.setLongitude(mylocation_list.get(1));
                                   n.putExtra("location",mylocation);
                                   n.putExtra("mydescriptioninput",reminderDescription.getText());
                                   n.putExtra("mydate",mydate);
