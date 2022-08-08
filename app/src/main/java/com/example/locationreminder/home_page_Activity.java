@@ -283,14 +283,14 @@ this class is related to activity_home_page.xml
                                   n.putExtra("mytime",mytime);
                                   n.putExtra("mytitleinput",reminderTitle.getText());
                                   n.putExtra("REQUEST_CODE", ID);
-                                  if (mylocation_list != null) {
+                                 /* if (mylocation_list != null) {
                                       if(mylocation_list.size() != 0) {
                                           mylocation.setLatitude(mylocation_list.get(0));
                                           mylocation.setLongitude(mylocation_list.get(1));
                                       }
-                                  }
-                                  mylocation.setLatitude(mylocation_list.get(0));
-                                  mylocation.setLongitude(mylocation_list.get(1));
+                                  }*/
+                                 // mylocation.setLatitude(mylocation_list.get(0));
+                                 // mylocation.setLongitude(mylocation_list.get(1));
                                   n.putExtra("location",mylocation);
                                   n.putExtra("mydescriptioninput",reminderDescription.getText());
                                   n.putExtra("mydate",mydate);
