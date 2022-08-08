@@ -227,7 +227,7 @@ this class is related to activity_home_page.xml
         private String Key;
         private int ID;
         private Location mylocation=new Location("");
-        private List<Double> mylocation_list= new ArrayList<Double>();
+        //private List<Double> mylocation_list= new ArrayList<Double>();
         LinearLayout myreminders;
 
 
@@ -289,6 +289,8 @@ this class is related to activity_home_page.xml
                                           mylocation.setLongitude(mylocation_list.get(1));
                                       }
                                   }
+                                  mylocation.setLatitude(mylocation_list.get(0));
+                                  mylocation.setLongitude(mylocation_list.get(1));
                                   n.putExtra("location",mylocation);
                                   n.putExtra("mydescriptioninput",reminderDescription.getText());
                                   n.putExtra("mydate",mydate);
