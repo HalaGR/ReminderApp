@@ -5,17 +5,23 @@ import java.util.List;
 import android.location.Location;
 
 public class firebasemodel {
-    /* in this class we save all the information that we bring from firebase in it
-    that include the data that user saved before for remind him
+    /* model class for an object saved in database
     */
     private String title;
     private String description;
     private String date;
     private String time;
+    private int ID;
     private List<Object> reminder=new ArrayList<Object>();
 
     public  firebasemodel(){
 
+    }
+    public firebasemodel compar(firebasemodel a, firebasemodel b){
+        if(a.getId()> b.getId()){
+            return a;
+        }
+        return b;
     }
     public firebasemodel(String title, String description){
         this.title = title;
@@ -31,6 +37,9 @@ public class firebasemodel {
 
     public String getTime() {
         return time;
+    }
+    public int getId() {
+        return ID;
     }
 
 
@@ -48,7 +57,7 @@ public class firebasemodel {
 
     //constructor with all parameters
 
-   public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location,List<Object> reminder){
+   public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location,List<Object> reminder, int ID){
 
 
   // public firebasemodel(String title, String description, String date, List<String> weather, String time, List<Double> location){
@@ -58,6 +67,7 @@ public class firebasemodel {
         this.date = date;
         this.time = time;
         this.reminder=reminder;
+        this.ID=ID;
     }
 
 

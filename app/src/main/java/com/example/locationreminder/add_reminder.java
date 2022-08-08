@@ -56,10 +56,9 @@ import java.util.function.Function;
 
 public class add_reminder extends SupportActivity {
 
-/* In this activity class user can choose the way that he wanna to reminded using it
-  , there are three ways by time,location and date , he also can write a title and description
-  we save all the information in firebase to reuse it for showing a notification and showing
-   all the reminders in home page .
+/* take as input detailes for new reminder, title and description as mandatory, time date and location as optional,
+     save new reminders in database and set an alarm based on the input,
+     when reminder is saved go back to home page.
    this activity is related to activity_add_reminder.xml
  */
     EditText mytitleinput, mydescriptioninput, mydate,mytime;
@@ -82,13 +81,14 @@ public class add_reminder extends SupportActivity {
     String from="";
     String locationID="";
     Button exit;
+    String is_new_reminder = "";
     int hour, minute;
     //set alarm param
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     private Calendar c;
 //********************8
-    private String id;
+    private int REQUEST_CODE;
     private LatLng latLng;
     private Double radius;
     private String message;
@@ -130,9 +130,12 @@ public class add_reminder extends SupportActivity {
             date = extras.getString("mydate");
             time = extras.getString("mytime");
             Key= extras.getString("Key");
+            if(Key==null)Key="";
             ifLocation= extras.getString("ifLocation");
             from= extras.getString("from");
             locationID= extras.getString("locationID");
+            REQUEST_CODE= extras.getInt("REQUEST_CODE");
+            is_new_reminder = extras.getString("new_reminder");
             mytitleinput.setText(title);
             mydescriptioninput.setText(description);
             mydate.setText(date);
@@ -198,13 +201,45 @@ public class add_reminder extends SupportActivity {
                 }
             }
         });
-
+        // Time switch
+        //time set
+        Calendar calendar = Calendar.getInstance();
+        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
+        final int minute = calendar.get(Calendar.MINUTE);
         // Time switch
         mytime_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked == true){
                     Toast.makeText(getBaseContext(), "On", Toast.LENGTH_SHORT).show();
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(
+                            add_reminder.this,android.R.style.Theme_Holo_Light_Dialog_NoActionBar, new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                            //Calendar c =Calendar.getInstance();
+                            c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                            c.set(Calendar.MINUTE,minute);
+                            c.set(Calendar.SECOND,0);
+                            String time = hourOfDay + ":" + minute ;
+                            mytime.setText(time);
+                            mytime_switch.setChecked(true);
+
+                        }
+                    }, hourOfDay, minute, false);
+
+
+                    timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            if (which == DialogInterface.BUTTON_NEGATIVE)
+                            {
+                                mytime.setText("");
+                                mytime_switch.setChecked(false);
+                            }
+                        }
+                    });
+                    timePickerDialog.show();
+
 
                 }else{
                     Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
@@ -214,13 +249,9 @@ public class add_reminder extends SupportActivity {
             }
         });
 
-        // Time switch
-        //time set
-        Calendar calendar = Calendar.getInstance();
-        final int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
-        final int minute = calendar.get(Calendar.MINUTE);
 
-        mytime_switch.setOnClickListener(new View.OnClickListener() {
+
+        /*mytime_switch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
@@ -238,6 +269,7 @@ public class add_reminder extends SupportActivity {
                     }
                 }, hourOfDay, minute, false);
 
+
                 timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which)
                     {
@@ -248,12 +280,15 @@ public class add_reminder extends SupportActivity {
                         }
                     }
                 });
-
                 timePickerDialog.show();
 
 
+
+
             }
-        });
+        });*/
+
+
 
        //location set
         //final LocationAdapter adapter=new LocationAdapter(getSupportFragmentManager(),this,1);
@@ -283,6 +318,7 @@ public class add_reminder extends SupportActivity {
                     n.putExtra("Key",Key);
                     n.putExtra("from",from);
                     n.putExtra("locationID",locationID);
+                    n.putExtra("REQUEST_CODE", REQUEST_CODE);
                     startActivity(n);
                 }else{
                     Toast.makeText(getBaseContext(), "Off", Toast.LENGTH_SHORT).show();
@@ -316,7 +352,6 @@ public class add_reminder extends SupportActivity {
                 // add reminder to database
                 DocumentReference documentReference = firebasefirestore.collection("reminders").document(firebaseUser.getUid()).collection("myreminders").document();
                 Map<String, Object> reminder = new HashMap<>(); // save reminder data in a map
-
                 List<Object> reminderLocation_list=new ArrayList<Object>();
                 if (remindmethere_switch.isChecked())
                 {
@@ -339,6 +374,7 @@ public class add_reminder extends SupportActivity {
                          locationDetails2 =getLast();
                          addReminder();
                      }
+
                 reminderLocation_list.add(locationDetails2.getId());
                 reminderLocation_list.add(locationDetails2.getLatLng());
                 reminderLocation_list.add(locationDetails2.getRadius());
@@ -350,6 +386,13 @@ public class add_reminder extends SupportActivity {
                     reminder.put("reminder",reminderLocation_list);
                 }
                 //reminder.put("reminder",getFinal());
+                if(is_new_reminder != null) {
+                    if (is_new_reminder.equals("true")) {
+                        REQUEST_CODE = 0;
+                    }else if(is_new_reminder.equals("false")){
+                        REQUEST_CODE++;
+                    }
+                }
                 if (mydate_switch.isChecked()) { // if Date is chosen
                     if (date.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Please Choose a Date", Toast.LENGTH_SHORT).show();
@@ -372,6 +415,7 @@ public class add_reminder extends SupportActivity {
                 }else {
                     reminder.put("title", title);
                     reminder.put("description", description);
+                    reminder.put("ID", REQUEST_CODE);
                    if(Key!=null){ if (Key.equals("")) {
                         documentReference.set(reminder).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -383,10 +427,10 @@ public class add_reminder extends SupportActivity {
                                 //set alarM
                                 setAlarm();
                                 //clear input
-                                mytitleinput.getText().clear();
-                                mydescriptioninput.getText().clear();
-                                mydate.getText().clear();
-                                mytime.getText().clear();
+                                mytitleinput.setText("");
+                                mydescriptioninput.setText("");
+                                mydate.setText("");
+                                mytime.setText("");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -406,10 +450,10 @@ public class add_reminder extends SupportActivity {
                                 //set alarM
                                 setAlarm();
                                 //clear input
-                                mytitleinput.getText().clear();
-                                mydescriptioninput.getText().clear();
-                                mydate.getText().clear();
-                                mytime.getText().clear();
+                                mytitleinput.setText("");
+                                mydescriptioninput.setText("");
+                                mydate.setText("");
+                                mytime.setText("");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -479,17 +523,28 @@ public class add_reminder extends SupportActivity {
 
     private void setAlarm() {
         //Log.d("notification", "inside setAlarm in addReminder" );
-
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this,AlarmReceiver.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("title", mytitleinput.getText().toString());
-        intent.putExtra("description", mydescriptioninput.getText().toString());
-        pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+       // if(from != null&&!from.equals("edit")) {
+            //new alarm
+          /*  alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("title", mytitleinput.getText().toString());
+            intent.putExtra("description", mydescriptioninput.getText().toString());
+            pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);*/
+       // }else{
+            //coming from edit butten
+            //cancel already existing alarm
+            alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+          //  alarmManager.cancel(pendingIntent);
+            //create new one
+            Intent intent = new Intent(this, AlarmReceiver.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("title", mytitleinput.getText().toString());
+            intent.putExtra("description", mydescriptioninput.getText().toString());
+            intent.putExtra("REQUEST_CODE", REQUEST_CODE);
+            pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+       // }
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);
-
-
-
         Toast.makeText(this, "Alarm set Successfully" , Toast.LENGTH_SHORT).show();
     }
 

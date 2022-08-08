@@ -270,8 +270,7 @@
                     android:layout_marginTop="0dp"
                     android:background="@android:color/transparent"
                     android:hint=""
-                    android:textColor="@color/Gray"
-
+                    android:textColor="@color/black"
                     android:textColorHint="@color/SlateGray"
                     android:textSize="12sp"/>
 

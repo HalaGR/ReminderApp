@@ -13,8 +13,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 public class    AlarmReceiver extends BroadcastReceiver {
-    /* in this class the notification of time and date will appear for user When the right time,date happens
-    (the title and description will show as notification )
+    /* send notification with the reminders details on the time set for it to pop up.
+    (title and description will show as notification )
      */
 
     public AlarmReceiver(){
@@ -23,30 +23,33 @@ public class    AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        //Log.d("notification", "inside alarm receiver1");
+
 
         Intent i = new Intent(context,home_page_Activity.class);// change this to view activity later
         Bundle extras = intent.getExtras();
         String  title="";
         String  description="";
+        int REQUEST_CODE=0;
         if (extras != null) {
              title = extras.getString("title");
              description = extras.getString("description");
+            REQUEST_CODE = extras.getInt("REQUEST_CODE");
+            Log.d("notification", description + "on receive");
             intent.removeExtra("title");
             intent.removeExtra("description");
 
         }
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,REQUEST_CODE,intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         //Snooze button
         Intent snoozeIntent = new Intent(context, AlarmReceiver.class);
         // snoozeIntent.setAction("Snooze");
         snoozeIntent.putExtra("Snooze", 0);
         PendingIntent snoozePendingIntent =
-                PendingIntent.getBroadcast(context, 0, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.getBroadcast(context, REQUEST_CODE, snoozeIntent, PendingIntent.FLAG_ONE_SHOT);
 
-
+        Log.d("notification", description + "on receive 2");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"foxandroid")
                 .setSmallIcon(R.drawable.reminder_logo)
                 .setContentTitle(title)
