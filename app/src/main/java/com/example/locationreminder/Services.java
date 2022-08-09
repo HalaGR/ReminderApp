@@ -22,9 +22,14 @@ import android.os.Build.VERSION;
 //import android.support.v4.content.ContextCompat;
 //import android.support.v4.content.res.ResourcesCompat;
 import android.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.NotificationCompat;
 //import com.android.raywenderlich.remindmethere.MainActivity.Companion;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +39,14 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-public final class Services {
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.concurrent.Callable;
+import java.util.function.Function;
+
+public final class Services{
 
     /* in this class we can find functions that will help for saving location
       like view location, send notification,
@@ -67,14 +79,17 @@ public final class Services {
             notificationManager.createNotificationChannel(channel);
         }
 
+
+
         Intent intent = ControlActivity.Companion.newIntent(context.getApplicationContext(), latLng);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context).addParentStack(ControlActivity.class).addNextIntent(intent);
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(specialNum(), PendingIntent.FLAG_UPDATE_CURRENT);
         //Notification notification = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION).setSmallIcon(R.drawable.reminder_logo).setContentTitle((CharSequence)message).setContentIntent(notificationPendingIntent).setAutoCancel(true).build();
-        Notification notification = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION).setSmallIcon(R.drawable.reminder_logo).setContentTitle( title).setContentText("We are in "+message+" "+description).setAutoCancel(true).build();
+        Notification notification = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION).setSmallIcon(R.drawable.reminder_logo).setContentTitle(title).setContentText(description).setAutoCancel(true).build();
         notificationManager.notify(specialNum(), notification);
 
     }
+
     public static final BitmapDescriptor BitmapDescriptorByUsingVector(Resources resources, int id) {
         Drawable vectorDrawable =getDrawable(resources, id, (Theme)null);
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Config.ARGB_8888);

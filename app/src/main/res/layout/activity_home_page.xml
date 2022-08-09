@@ -95,7 +95,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="310dp"
-        android:layout_marginTop="-800dp"
+        android:layout_marginTop="-750dp"
         android:layout_marginRight="5dp"
         android:visibility="visible"
         android:background="@drawable/ic_baseline_arrow_back_ios_24"

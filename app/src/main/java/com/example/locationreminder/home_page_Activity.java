@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -86,6 +88,9 @@ this class is related to activity_home_page.xml
         fStore = FirebaseFirestore.getInstance();
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
+        //this.locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+
         if (!user.isEmailVerified()) {
             verifyMsg.setVisibility(View.VISIBLE);
             verifyMsg.setOnClickListener(new View.OnClickListener() {
@@ -349,6 +354,7 @@ this class is related to activity_home_page.xml
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private final void removeReminder(LocationDetails locationDetails) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {

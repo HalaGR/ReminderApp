@@ -6,15 +6,28 @@ package com.example.locationreminder;
 import android.content.Context;
 import android.content.Intent;
 //import android.support.v4.app.JobIntentService;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.JobIntentService;
+
+import android.os.Build;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
-
+import java.util.concurrent.Callable;
+import java.util.function.Function;
 
 
 public final class PreparingForLocationNotification extends JobIntentService {
@@ -55,10 +68,29 @@ public final class PreparingForLocationNotification extends JobIntentService {
             LatLng latLng = locationDetails != null ? locationDetails.getLatLng() : null;
             if (message != null && latLng != null){// && locationDetails.getCurrentUser().equals(currentUser())) {
                 Services.sendNotification((Context)this, message, latLng, locationDetails.getTitle(), locationDetails.getDescription());
+                //removeReminderFromFirebase(locationDetails);
             }
         }
 
     }
+    public  final void removeReminderFromFirebase(LocationDetails locationDetails)
+    {  FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        fStore.collection("reminders").whereEqualTo("reminder[0]",locationDetails.getId()).get().getResult().getDocuments().get(0).getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(@NonNull Void unused) {
+                new ServicesForLocation().removeReminder(locationDetails);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("tag", "Error deleting document");
+            }
+        });
+    }
+
 
     public static final class Companion {
         public final void enqueueWork( Context context,  Intent intent) {

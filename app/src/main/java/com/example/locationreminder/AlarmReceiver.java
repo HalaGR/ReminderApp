@@ -6,11 +6,20 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class    AlarmReceiver extends BroadcastReceiver {
     /* send notification with the reminders details on the time set for it to pop up.
@@ -65,8 +74,25 @@ public class    AlarmReceiver extends BroadcastReceiver {
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(123,builder.build());
        // Log.d("notification", "inside alarm receiver3");
-        
+       // removeReminderFromFirebase(0);
 
 
+    }
+    public  final void removeReminderFromFirebase(int ID)
+    {  FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore fStore = FirebaseFirestore.getInstance();
+
+        fStore.collection("reminders").whereEqualTo("ID",ID).get().getResult().getDocuments().get(0).getReference().delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(@NonNull Void unused) {
+                //new ServicesForLocation().removeReminder(locationDetails); <------ edit to be for time
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("tag", "Error deleting document");
+            }
+        });
     }
 }

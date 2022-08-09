@@ -199,23 +199,6 @@ public final class LocationActivity extends SupportActivity implements OnMapRead
  //this.getStoreHouse().setReminder(LocationActivity.this.locationDetails);
     }
 
- /*   //******************************added to translate add to add_reminder -end************************
-    public final void addReminder(LocationDetails locationDetails) {
-        this.getStoreHouse().add(locationDetails,(Callable) (new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                LocationActivity.this.setResult(Activity.RESULT_OK);
-                LocationActivity.this.finish();
-                return null;
-            }
-        }),(Function) (new Function<String,Void>() {
-            @Override
-            public Void apply(String it) {
-                Snackbar.make((CoordinatorLayout) LocationActivity.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
-                return null;
-            }
-        }));
-    }*/
 
     private final void updateLocation() {
         this.map.clear();

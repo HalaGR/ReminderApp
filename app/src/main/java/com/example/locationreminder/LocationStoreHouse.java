@@ -81,7 +81,7 @@ public final class LocationStoreHouse {
                 }
 
             })).addOnFailureListener((OnFailureListener)(new OnFailureListener() {
-                @RequiresApi(api = Build.VERSION_CODES.N)
+
                 public final void onFailure(Exception it) {
                     failure.apply(ErrorMessagesForLocation.INSTANCE.errorService(LocationStoreHouse.this.context, it));
                 }
@@ -110,7 +110,7 @@ public final class LocationStoreHouse {
                 }
             }
         })).addOnFailureListener((OnFailureListener)(new OnFailureListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
+
             public final void onFailure(Exception it) {
                 failure.apply(ErrorMessagesForLocation.INSTANCE.errorService(LocationStoreHouse.this.context, it));
 

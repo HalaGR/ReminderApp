@@ -194,52 +194,7 @@ public final class ControlActivity extends SupportActivity implements OnMapReady
         onMapAndPermissionReady();
     }
 
-   /* public boolean onMarkerClick(Marker marker) {
-        LocationDetails reminder = this.getStoreHouse().search((String) marker.getTag());
-        if (reminder != null) {
-            this.showReminderRemoveAlert(reminder);
-        }
-        return true;
-    }*/
 
-    /*private final void showReminderRemoveAlert(LocationDetails locationDetails) {
-        AlertDialog alertDialog = (new AlertDialog.Builder((Context) this)).create();
-        alertDialog.setMessage((CharSequence) this.getString(R.string.reminder_removal_alert));
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, (CharSequence) this.getString(R.string.reminder_removal_alert_positive),new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                ControlActivity.this.removeReminder(locationDetails);
-                dialog.dismiss();
-            }
-        });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, (CharSequence) this.getString(R.string.reminder_removal_alert_negative),new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        alertDialog.show();
-    }*/
-
-
-    /*private final void removeReminder(LocationDetails locationDetails) {
-        this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {
-            @Override
-            public Void call() throws Exception {
-                ControlActivity.this.viewLocations();
-                Snackbar.make((CoordinatorLayout) ControlActivity.this.findViewById(R.id.main), R.string.reminder_removed_success, Snackbar.LENGTH_LONG).show();
-                return null;
-            }
-        }),  (Function) (new Function<String,Void>() {
-            @Override
-            public Void apply(String it) {
-                Snackbar.make((CoordinatorLayout) ControlActivity.this.findViewById(R.id.main), it, Snackbar.LENGTH_LONG).show();
-                return null;
-            }
-
-
-        }));
-
-    }*/
 
     public static final class Companion {
 
