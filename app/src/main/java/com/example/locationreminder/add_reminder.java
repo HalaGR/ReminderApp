@@ -409,9 +409,9 @@ public class add_reminder extends SupportActivity {
                     }
                 }else{ reminder.put("time", "");}
 
-                if (title.isEmpty()||description.isEmpty() || (!(mydate_switch.isChecked()) && !(mytime_switch.isChecked()) &&!(remindmethere_switch.isChecked()))){// make sure files are filled
+                if (title.isEmpty()||description.isEmpty()){// make sure files are filled
                     //are all files filed
-                    Toast.makeText(getApplicationContext(), "Please fill Both title , description files and one of reminder ways", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please fill Both title , description files", Toast.LENGTH_SHORT).show();
                 }else {
                     reminder.put("title", title);
                     reminder.put("description", description);
@@ -422,10 +422,12 @@ public class add_reminder extends SupportActivity {
                             public void onSuccess(Void unused) {
                                 //reminder saved successfully
                                 // send feedback and go back to home page
-                                Toast.makeText(getApplicationContext(), "LocationDetails saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Location Details saved successfully, we'll remind you!", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(add_reminder.this, home_page_Activity.class));
                                 //set alarM
-                                setAlarm();
+                                if(mydate_switch.isChecked() || mytime_switch.isChecked()) {
+                                    setAlarm();
+                                }
                                 //clear input
                                 mytitleinput.setText("");
                                 mydescriptioninput.setText("");
@@ -448,7 +450,9 @@ public class add_reminder extends SupportActivity {
 
                                 startActivity(new Intent(add_reminder.this, home_page_Activity.class));
                                 //set alarM
-                                setAlarm();
+                                if(mydate_switch.isChecked() || mytime_switch.isChecked()) {
+                                    setAlarm();
+                                }
                                 //clear input
                                 mytitleinput.setText("");
                                 mydescriptioninput.setText("");

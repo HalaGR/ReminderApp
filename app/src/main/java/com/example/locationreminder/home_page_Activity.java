@@ -53,12 +53,6 @@ user can sign out in this page.
 this class is related to activity_home_page.xml
  */
 
-  /*  public class firebase_compare implements Comparator<firebasemodel> {
-        @Override
-        public int compare(firebasemodel o1, firebasemodel o2) {
-            return Integer.compare(o1.getId(), o2.getId());
-        }
-    }*/
 
     TextView my_add_reminder_btn;
     Button my_sign_out_but;
