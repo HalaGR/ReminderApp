@@ -137,6 +137,7 @@ this class is related to activity_home_page.xml
             public void onClick(View view) { //go to add reminder page on click
                 //send last id
                 Intent n= new Intent(home_page_Activity.this, add_reminder.class);
+                n.putExtra("from", "home");
                 if( all_user_reminders.getSnapshots().isEmpty()){
                     //no reminders
                     n.putExtra("new_reminder","true");
@@ -259,11 +260,13 @@ this class is related to activity_home_page.xml
                                           }
                                           //delete time related alarm
                                           if (mydate != null || mytime != null){
-                                              AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                                              Intent intent = new Intent(home_page_Activity.this, AlarmReceiver.class);
-                                              intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                              PendingIntent pendingIntent = PendingIntent.getBroadcast(home_page_Activity.this, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                                              alarmManager.cancel(pendingIntent);
+                                              if(!mydate.equals("") || !mytime.equals("")) {
+                                                  AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                                                  Intent intent = new Intent(home_page_Activity.this, AlarmReceiver.class);
+                                                  intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                                  PendingIntent pendingIntent = PendingIntent.getBroadcast(home_page_Activity.this, ID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                                  alarmManager.cancel(pendingIntent);
+                                              }
                                           }
                                           Toast.makeText(view.getContext(), "LocationDetails successfully deleted!", Toast.LENGTH_SHORT).show();
                                       }

@@ -133,6 +133,7 @@ public class add_reminder extends SupportActivity {
             if(Key==null)Key="";
             ifLocation= extras.getString("ifLocation");
             from= extras.getString("from");
+            //if(from==null)from="";
             locationID= extras.getString("locationID");
             REQUEST_CODE= extras.getInt("REQUEST_CODE");
             is_new_reminder = extras.getString("new_reminder");
@@ -364,7 +365,7 @@ public class add_reminder extends SupportActivity {
                         locationDetails2 =get(locationID);
                     }
                     }
-                       if(from!=null&&!from.equals("edited")&&!from.equals("edit"))
+                       if(from.equals("home"))
                     {
                         addReminder();
                     }
