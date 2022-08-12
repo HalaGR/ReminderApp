@@ -12,13 +12,26 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />
+  <!--search view to search our location-->
+  <androidx.appcompat.widget.SearchView
+      android:id="@+id/idSearchView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="50dp"
+      android:layout_marginLeft="6dp"
+      android:layout_marginRight="6dp"
+      android:background="#BFBFBF"
+      android:elevation="5dp"
+      app:iconifiedByDefault="false"
+      app:queryHint="Search Here"
+      android:showAsAction="always"/>
 
   <Button
       android:id="@+id/ok_button"
       android:layout_width="50dp"
       android:layout_height="50dp"
       android:layout_marginLeft="0dp"
-      android:layout_marginBottom="-585dp"
+      android:layout_marginBottom="-580dp"
       android:text="Ok"
       android:visibility="visible"
       android:background="@drawable/back"
