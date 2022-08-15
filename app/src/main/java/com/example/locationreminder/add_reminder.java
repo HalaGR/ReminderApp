@@ -133,7 +133,9 @@ public class add_reminder extends SupportActivity {
             if(Key==null)Key="";
             ifLocation= extras.getString("ifLocation");
             from= extras.getString("from");
-            //if(from==null)from="";
+
+            if(from==null)from="";
+
             locationID= extras.getString("locationID");
             REQUEST_CODE= extras.getInt("REQUEST_CODE");
             is_new_reminder = extras.getString("new_reminder");
@@ -365,7 +367,11 @@ public class add_reminder extends SupportActivity {
                         locationDetails2 =get(locationID);
                     }
                     }
+
                        if(from.equals("home"))
+
+                    //if(from!=null&&!from.equals("edited")&&!from.equals("edit"))
+
                     {
                         addReminder();
                     }
@@ -476,8 +482,8 @@ public class add_reminder extends SupportActivity {
     }
     //******************************added to translate add-remove to add_reminder -start**********************
     public final void addReminder() {
-        this.getStoreHouse().getFinal().setTitle(mytitleinput.getText().toString());
-        this.getStoreHouse().getFinal().setDescription(mydescriptioninput.getText().toString());
+        this.getStoreHouse().getFinal().setTitle(((EditText)findViewById(R.id.titleinput)).getText().toString());
+        this.getStoreHouse().getFinal().setDescription(((EditText)findViewById(R.id.titleinput)).getText().toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             this.getStoreHouse().add(this.getStoreHouse().getFinal(),(Callable) (new Callable<Void>() {
                 @Override

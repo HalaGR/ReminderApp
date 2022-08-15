@@ -137,7 +137,9 @@ this class is related to activity_home_page.xml
             public void onClick(View view) { //go to add reminder page on click
                 //send last id
                 Intent n= new Intent(home_page_Activity.this, add_reminder.class);
+
                 n.putExtra("from", "home");
+
                 if( all_user_reminders.getSnapshots().isEmpty()){
                     //no reminders
                     n.putExtra("new_reminder","true");
@@ -351,7 +353,7 @@ this class is related to activity_home_page.xml
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
+
     private final void removeReminder(LocationDetails locationDetails) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             this.getStoreHouse().remove(locationDetails,(Callable) (new Callable<Void>() {

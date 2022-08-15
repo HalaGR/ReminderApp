@@ -85,7 +85,7 @@ public final class Services{
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context).addParentStack(ControlActivity.class).addNextIntent(intent);
         PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(specialNum(), PendingIntent.FLAG_UPDATE_CURRENT);
         //Notification notification = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION).setSmallIcon(R.drawable.reminder_logo).setContentTitle((CharSequence)message).setContentIntent(notificationPendingIntent).setAutoCancel(true).build();
-        Notification notification = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION).setSmallIcon(R.drawable.reminder_logo).setContentTitle(title).setContentText(description).setAutoCancel(true).build();
+        Notification notification = new NotificationCompat.Builder(context, CHANNEL_NOTIFICATION).setSmallIcon(R.drawable.reminder_logo).setContentTitle("approaching destination").setContentText("").setAutoCancel(true).build();
         notificationManager.notify(specialNum(), notification);
 
     }
