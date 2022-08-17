@@ -252,7 +252,7 @@ public final class ControlActivity extends SupportActivity implements OnMapReady
             }));
            fusedLocationProviderClient= LocationServices.getFusedLocationProviderClient(this);
             String url="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
-            String googleMapKey="AIzaSyDpaldh_UjIjQI3XGBYLZpKFzz1uITynU8";
+            String googleMapKey="<key>";
             //****************************************places gas station,restaurants,coffee,ATM,hospital-start*******
             (findViewById(R.id.gasStation)).setOnClickListener((OnClickListener) (new OnClickListener() {
                 @Override
