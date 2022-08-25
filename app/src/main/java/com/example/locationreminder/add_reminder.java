@@ -368,7 +368,7 @@ public class add_reminder extends SupportActivity {
                     }
                     }
 
-                       if(from.equals("home"))
+                       if(from.equals("home")||from.equals(""))
 
                     //if(from!=null&&!from.equals("edited")&&!from.equals("edit"))
 
@@ -436,10 +436,10 @@ public class add_reminder extends SupportActivity {
                                     setAlarm();
                                 }
                                 //clear input
-                                mytitleinput.setText("");
+                              /*  mytitleinput.setText("");
                                 mydescriptioninput.setText("");
                                 mydate.setText("");
-                                mytime.setText("");
+                                mytime.setText("");*/
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -461,10 +461,10 @@ public class add_reminder extends SupportActivity {
                                     setAlarm();
                                 }
                                 //clear input
-                                mytitleinput.setText("");
+                               /* mytitleinput.setText("");
                                 mydescriptioninput.setText("");
                                 mydate.setText("");
-                                mytime.setText("");
+                                mytime.setText("");*/
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -483,7 +483,7 @@ public class add_reminder extends SupportActivity {
     //******************************added to translate add-remove to add_reminder -start**********************
     public final void addReminder() {
         this.getStoreHouse().getFinal().setTitle(((EditText)findViewById(R.id.titleinput)).getText().toString());
-        this.getStoreHouse().getFinal().setDescription(((EditText)findViewById(R.id.titleinput)).getText().toString());
+        this.getStoreHouse().getFinal().setDescription(((EditText)findViewById(R.id.descriptioninput)).getText().toString());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             this.getStoreHouse().add(this.getStoreHouse().getFinal(),(Callable) (new Callable<Void>() {
                 @Override

@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JsonParser {
+    /* JSON. parse() is a crucial method for converting JSON data in string
+     form into Javascript objects.
+    * */
     private HashMap<String,String> parseJsonObject(JSONObject object){
         HashMap<String,String> dataList=new HashMap<>();
         try{
