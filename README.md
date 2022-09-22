@@ -1,5 +1,5 @@
 # ReminderApp
-##How To:
+## How To:
 •	To watch the demo video, you can find it at https://drive.google.com/drive/folders/1cPQbBXtAS9VMUcM8eJsq1pSuEfqnChZV?usp=sharing 
 •	  Import repository from master branch for project Smart Reminder   from the link below :"https://github.com/HalaGR/ReminderApp.git".
 
